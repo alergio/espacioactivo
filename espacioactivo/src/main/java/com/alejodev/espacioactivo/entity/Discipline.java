@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,6 @@ public class Discipline {
     private DisciplineType type;
 
     @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Activity> activities;
+    private List<Activity> activities = new ArrayList<>();
 
 }

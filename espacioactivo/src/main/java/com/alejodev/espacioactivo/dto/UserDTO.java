@@ -1,0 +1,33 @@
+package com.alejodev.espacioactivo.dto;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * DTO de User para la interaccion entre el cliente y el servidor.
+ *
+ * @author alejo
+ * @version 1.0 21-04-2024
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserDTO {
+
+    private Long id;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String registrationDate;
+    private boolean isEnabled;
+    private Set<RoleDTO> roles = new HashSet<>();
+
+}
