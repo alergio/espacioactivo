@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.alejodev.espacioactivo","l":"EspacioactivoApplication"},{"p":"com.alejodev.espacioactivo.entity","l":"User"}];updateSearchResults();

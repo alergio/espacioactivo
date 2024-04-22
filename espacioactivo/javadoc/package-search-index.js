@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.alejodev.espacioactivo"},{"l":"com.alejodev.espacioactivo.entity"}];updateSearchResults();

@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"com.alejodev.espacioactivo","c":"EspacioactivoApplication","l":"EspacioactivoApplication()","u":"%3Cinit%3E()"},{"p":"com.alejodev.espacioactivo","c":"EspacioactivoApplication","l":"main(String[])","u":"main(java.lang.String[])"},{"p":"com.alejodev.espacioactivo.entity","c":"User","l":"User()","u":"%3Cinit%3E()"}];updateSearchResults();
