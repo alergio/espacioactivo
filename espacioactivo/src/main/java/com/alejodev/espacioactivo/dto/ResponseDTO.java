@@ -6,20 +6,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 /**
- * DTO de Role para la interaccion entre el cliente y el servidor.
+ * El objeto que usaremos como interfaz para enviar las respuestas del servidor al cliente.
  *
  * @author alejo
  * @version 1.0 21-04-2024
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class RoleDTO implements EntityIdentificatorDTO {
-
-    private Long id;
-    private String name;
-
+public class ResponseDTO {
+    private int statusCode;
+    private String message;
+    private Map<String, Object> data;
 }

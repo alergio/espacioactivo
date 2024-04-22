@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressDTO {
+public class AddressDTO implements EntityIdentificatorDTO {
 
     private Long id;
     private String street;

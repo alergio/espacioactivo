@@ -20,7 +20,7 @@ import java.util.Set;
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserDTO {
+public class UserDTO implements EntityIdentificatorDTO {
 
     private Long id;
     private String firstname;

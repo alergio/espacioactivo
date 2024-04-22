@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DisciplineDTO {
+public class DisciplineDTO implements EntityIdentificatorDTO{
 
     private Long id;
     private String name;

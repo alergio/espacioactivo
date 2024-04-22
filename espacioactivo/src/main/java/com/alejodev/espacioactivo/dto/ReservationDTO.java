@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ReservationDTO {
+public class ReservationDTO implements EntityIdentificatorDTO {
 
     private Long id;
     private String date;
