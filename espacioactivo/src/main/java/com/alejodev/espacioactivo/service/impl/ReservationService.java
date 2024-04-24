@@ -1,41 +1,33 @@
 package com.alejodev.espacioactivo.service.impl;
 
-import com.alejodev.espacioactivo.dto.DisciplineDTO;
 import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
+import com.alejodev.espacioactivo.dto.ReservationDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
-import com.alejodev.espacioactivo.entity.Discipline;
-import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
+import com.alejodev.espacioactivo.entity.Reservation;
+import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getDisciplineCRUDMapper;
+import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getReservationCRUDMapper;
 
-
-/**
- *
- *
- * @author alejo
- * @version 1.0 21-04-2024
- */
 @Service
-public class DisciplineService implements ICRUDService<DisciplineDTO> {
+public class ReservationService implements ICRUDService<ReservationDTO> {
 
     @Autowired
-    private IDisciplineRepository disciplineRepository;
-    private CRUDMapper<DisciplineDTO, Discipline> crudMapper;
+    private IReservationRepository reservationRepository;
+    private CRUDMapper<ReservationDTO, Reservation> crudMapper;
 
     @PostConstruct
     private void setUpCrudMapper(){
-        crudMapper = getDisciplineCRUDMapper(disciplineRepository);
+        crudMapper = getReservationCRUDMapper(reservationRepository);
     }
 
-
     @Override
-    public ResponseDTO create(EntityIdentificatorDTO disciplineDTO) {
-        return crudMapper.create(disciplineDTO);
+    public ResponseDTO create(EntityIdentificatorDTO reservationDTO) {
+        return crudMapper.create(reservationDTO);
     }
 
     @Override
@@ -49,8 +41,8 @@ public class DisciplineService implements ICRUDService<DisciplineDTO> {
     }
 
     @Override
-    public ResponseDTO update(EntityIdentificatorDTO disciplineDTO) {
-        return crudMapper.update(disciplineDTO);
+    public ResponseDTO update(EntityIdentificatorDTO reservationDTO) {
+        return crudMapper.update(reservationDTO);
     }
 
     @Override

@@ -17,12 +17,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationFilter jwtAuthfilter;
+    private final CustomLogoutHandler logoutHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers(
                                 "**").permitAll());
+//                        .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+//                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER")
+//                        .anyRequest().authenticated())
+//                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthfilter, UsernamePasswordAuthenticationFilter.class)
+//                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
+//                        .addLogoutHandler(logoutHandler)
+//                        .logoutSuccessHandler(
+//                                ((request, response, authentication) -> SecurityContextHolder.clearContext())
+//                        ));
 
         return httpSecurity.build();
     }

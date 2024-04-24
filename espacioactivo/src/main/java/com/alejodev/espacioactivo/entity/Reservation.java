@@ -37,6 +37,6 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; // aca tengo que ver como lo condiciono xq es solo para customers
 
 }

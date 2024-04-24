@@ -1,13 +1,13 @@
 package com.alejodev.espacioactivo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Todas las disciplinas disponibles de la aplicacion, son su nombre y su tipo.
@@ -32,7 +32,22 @@ public class Discipline {
     @Enumerated(EnumType.STRING)
     private DisciplineType type;
 
-    @OneToMany(mappedBy = "discipline", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Activity> activities = new ArrayList<>();
+    @OneToMany(mappedBy = "discipline", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private Set<Activity> activities = new HashSet<>();
+
+
+    // Implementación de equals() y hashCode()
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Discipline discipline = (Discipline) o;
+        return Objects.equals(id, discipline.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

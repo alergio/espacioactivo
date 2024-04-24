@@ -6,25 +6,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Domicilios, por ahora solo asociados a las actividades.
- *
- * @author alejo
- * @version 1.0 21-4-2024
- */
 @Entity
+@Table(name = "token")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Address")
-public class Address {
+public class Token {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String street;
-    private String number;
-    private String state;
+    private String token;
+
+    @Column(name = "is_logged_out")
+    private boolean loggedOut;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
+

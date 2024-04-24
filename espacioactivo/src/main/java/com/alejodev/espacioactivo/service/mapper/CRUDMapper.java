@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.alejodev.espacioactivo.service.mapper.ConfigureMapper.configureMapper;
+
 /**
  * Servicio encargado de hacer el CRUD para ser reutilizado desde otros servicios.
  *
@@ -36,7 +38,7 @@ public class CRUDMapper <T, E> implements ICRUDService {
     private String entityClassNamePlural;
 
     private Logger LOGGER = Logger.getLogger(CRUDMapper.class);
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = configureMapper();
 
 
     /**
@@ -52,8 +54,8 @@ public class CRUDMapper <T, E> implements ICRUDService {
         ResponseDTO responseDTO = new ResponseDTO();
 
         E entity = modelMapper.map(entityDTO, entityClass);
-        repository.save(entity);
-        T entityDTOMapped = modelMapper.map(entity, dtoClass);
+        E entitySaved = repository.save(entity);
+        T entityDTOMapped = modelMapper.map(entitySaved, dtoClass);
 
         responseDTO.setStatusCode(HttpStatus.OK.value());
         responseDTO.setMessage(entityClassName + " saved successfully.");
