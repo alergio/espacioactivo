@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Actividades que proveen los profesores o space-renters.
@@ -46,7 +44,7 @@ public class Activity {
     private Address address;
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reservation> reservations = new ArrayList<>();
+    private Set<Appointment> appointments = new HashSet<>();
 
 
     // Implementación de equals() y hashCode()

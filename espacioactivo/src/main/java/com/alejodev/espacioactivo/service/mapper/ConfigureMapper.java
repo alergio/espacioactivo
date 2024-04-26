@@ -2,24 +2,17 @@ package com.alejodev.espacioactivo.service.mapper;
 
 import com.alejodev.espacioactivo.dto.*;
 import com.alejodev.espacioactivo.entity.*;
-import jakarta.persistence.EnumType;
 import org.apache.log4j.Logger;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
-import org.modelmapper.spi.MappingContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -41,9 +34,9 @@ public class ConfigureMapper {
         /**
          * Mapear User a UserDTO
          */
-        TypeMap<User, UserDTO> userToUserDTOMapping = modelMapper.createTypeMap(User.class, UserDTO.class);
+        TypeMap<User, UserDTO> userToUserDTOMapper = modelMapper.createTypeMap(User.class, UserDTO.class);
 
-        userToUserDTOMapping.addMappings(mapper -> {
+        userToUserDTOMapper.addMappings(mapper -> {
 
             mapper.map(source -> Optional.ofNullable(source.getId()), UserDTO::setId);
             mapper.map(source -> Optional.ofNullable(source.getEmail()), UserDTO::setEmail);
@@ -73,9 +66,9 @@ public class ConfigureMapper {
         /**
          * Mapear UserDTO a User
          */
-        TypeMap<UserDTO, User> userDTOToUserMapping = modelMapper.createTypeMap(UserDTO.class, User.class);
+        TypeMap<UserDTO, User> userDTOToUserMapper = modelMapper.createTypeMap(UserDTO.class, User.class);
 
-        userDTOToUserMapping.addMappings(mapper -> {
+        userDTOToUserMapper.addMappings(mapper -> {
 
             mapper.map(source -> Optional.ofNullable(source.getId()), User::setId);
             mapper.map(source -> Optional.ofNullable(source.getEmail()), User::setEmail);
@@ -107,17 +100,17 @@ public class ConfigureMapper {
         /**
          * Mapear Activity a ActivityDTO
          */
-        TypeMap<Activity, ActivityDTO> activityToActivityDTOMapping
+        TypeMap<Activity, ActivityDTO> activityToActivityDTOMapper
                 = modelMapper.createTypeMap(Activity.class, ActivityDTO.class);
 
         Converter<User, UserDTO> userToUserDTOConverter = context -> {
             User source = context.getSource();
             UserDTO destination = new UserDTO();
-            userToUserDTOMapping.map(source, destination);
+            userToUserDTOMapper.map(source, destination);
             return destination;
         };
 
-        activityToActivityDTOMapping.addMappings(
+        activityToActivityDTOMapper.addMappings(
                 mapper -> {
                     mapper.using(userToUserDTOConverter)
                         .map(Activity::getUser, ActivityDTO::setUserDTO);
@@ -138,17 +131,17 @@ public class ConfigureMapper {
         /**
          * Mapear ActivityDTO a Activity
          */
-        TypeMap<ActivityDTO, Activity> activityDTOToActivityMapping
+        TypeMap<ActivityDTO, Activity> activityDTOToActivityMapper
                 = modelMapper.createTypeMap(ActivityDTO.class, Activity.class);
 
         Converter<UserDTO, User> userDTOToUserConverter = context -> {
             UserDTO source = context.getSource();
             User destination = new User();
-            userDTOToUserMapping.map(source, destination);
+            userDTOToUserMapper.map(source, destination);
             return destination;
         };
 
-        Converter<DisciplineDTO, Discipline> disciplineDTOToDiscipline = context -> {
+        Converter<DisciplineDTO, Discipline> disciplineDTOToDisciplineConverter = context -> {
             DisciplineDTO source = context.getSource();
             Discipline destination = new Discipline();
 
@@ -161,12 +154,12 @@ public class ConfigureMapper {
             return destination;
         };
 
-        activityDTOToActivityMapping.addMappings(
+        activityDTOToActivityMapper.addMappings(
                 mapper -> {
                     mapper.using(userDTOToUserConverter)
                         .map(ActivityDTO::getUserDTO, Activity::setUser);
 
-                    mapper.using(disciplineDTOToDiscipline)
+                    mapper.using(disciplineDTOToDisciplineConverter)
                             .map(ActivityDTO::getDisciplineDTO, Activity::setDiscipline);
 
                     mapper.map(ActivityDTO::getAddressDTO, Activity::setAddress);
@@ -180,35 +173,150 @@ public class ConfigureMapper {
         // ---------------------------------------------------------------------------- //
 
 
+        /**
+         * Mapear Appointment a AppointmentDTO
+         */
+        TypeMap<Appointment, AppointmentDTO> appointmentToAppointmentDTOMapper
+                = modelMapper.createTypeMap(Appointment.class, AppointmentDTO.class);
+
+            Converter<Activity, ActivityDTO> activityToActivityDTOConverter = context -> {
+                Activity source = context.getSource();
+                ActivityDTO destination = new ActivityDTO();
+                activityToActivityDTOMapper.map(source, destination);
+                return destination;
+            };
+
+        Converter<AppointmentState, AppointmentStateDTO> appointmentStateToApoointmentStateDTOConverter
+                = context -> {
+            AppointmentState source = context.getSource();
+            AppointmentStateDTO destination = new AppointmentStateDTO();
+
+            Optional.ofNullable(source.getId()).ifPresent(destination::setId);
+            Optional.ofNullable(source.getName())
+                    .map(AppointmentStateType::name)
+                    .ifPresent(destination::setName);
+
+            return destination;
+        };
+
+
+        appointmentToAppointmentDTOMapper.addMappings(
+                mapper -> {
+
+                    // mapeo la actividad
+                    mapper.using(activityToActivityDTOConverter)
+                        .map(Appointment::getActivity, AppointmentDTO::setActivityDTO);
+
+                    // mapeo la fecha
+                    mapper.map(source -> Optional.ofNullable(source.getDate())
+                            .map(Date::toString)
+                            .orElse(null), AppointmentDTO::setDate);
+
+                    // mapeo la hora
+                    mapper.map(source -> Optional.ofNullable(source.getTime())
+                            .map(Time::toString)
+                            .orElse(null), AppointmentDTO::setTime);
+
+                    // mapeo el estado
+                    mapper.using(appointmentStateToApoointmentStateDTOConverter)
+                            .map(Appointment::getAppointmentState, AppointmentDTO::setAppointmentStateDTO);
+
+                }
+        );
+
+
+
+        // ---------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------- //
+
+
+
+        /**
+         * Mapear AppointmentDTO a Appointment
+         */
+        TypeMap<AppointmentDTO, Appointment> appointmentDTOToAppointmentMapper
+                = modelMapper.createTypeMap(AppointmentDTO.class, Appointment.class);
+
+
+        Converter<ActivityDTO, Activity> activityDTOToActivityConverter = context -> {
+            ActivityDTO source = context.getSource();
+            Activity destination = new Activity();
+            activityDTOToActivityMapper.map(source, destination);
+            return destination;
+        };
+
+        Converter<AppointmentStateDTO, AppointmentState> appointmentStateDTOToApoointmentStateConverter
+                = context -> {
+            AppointmentStateDTO source = context.getSource();
+            AppointmentState destination = new AppointmentState();
+
+            Optional.ofNullable(source.getId()).ifPresent(destination::setId);
+            Optional.ofNullable(source.getName())
+                    .map(AppointmentStateType::valueOf)
+                    .ifPresent(destination::setName);
+
+            return destination;
+        };
+
+
+        appointmentDTOToAppointmentMapper.addMappings(
+                mapper -> {
+
+                    // mapeo al actividad
+                    mapper.using(activityDTOToActivityConverter)
+                            .map(AppointmentDTO::getActivityDTO, Appointment::setActivity);
+
+                    // mapeo la fecha
+                    mapper.map(source -> Optional.ofNullable(source.getDate())
+                            .map(dateString -> Date.valueOf(LocalDate.parse(dateString)))
+                            .orElse(null), Appointment::setDate);
+
+                    // mapeo la hora
+                    mapper.map(source -> Optional.ofNullable(source.getTime())
+                            .map(timeString -> Time.valueOf(LocalTime.parse(timeString)))
+                            .orElse(null), Appointment::setTime);
+
+                    // mapeo el estado
+                    mapper.using(appointmentStateDTOToApoointmentStateConverter)
+                            .map(AppointmentDTO::getAppointmentStateDTO, Appointment::setAppointmentState);
+
+                }
+        );
+
+
+
+
+
+        // ---------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------- //
+
+
 
         /**
          * Mapear Reservation a ReservationDTO
          */
-        TypeMap<Reservation, ReservationDTO> reservationToReservationDTOMapping
+        TypeMap<Reservation, ReservationDTO> reservationToReservationDTOMapper
                 = modelMapper.createTypeMap(Reservation.class, ReservationDTO.class);
 
-        Converter<Activity, ActivityDTO> activityToActivityDTOConverter = context -> {
-            Activity source = context.getSource();
-            ActivityDTO destination = new ActivityDTO();
-            activityToActivityDTOMapping.map(source, destination);
+        Converter<Appointment, AppointmentDTO> appointmentToActivityDTOConverter = context -> {
+            Appointment source = context.getSource();
+            AppointmentDTO destination = new AppointmentDTO();
+            appointmentToAppointmentDTOMapper.map(source, destination);
             return destination;
         };
 
-        reservationToReservationDTOMapping.addMappings(
-                mapper -> {
-                    mapper.using(activityToActivityDTOConverter)
-                        .map(Reservation::getActivity, ReservationDTO::setActivityDTO);
 
+        reservationToReservationDTOMapper.addMappings(
+                mapper -> {
+
+                    // mapeo el usuario
                     mapper.using(userToUserDTOConverter)
                         .map(Reservation::getUser, ReservationDTO::setUserDTO);
 
-                    mapper.map(source -> Optional.ofNullable(source.getDate())
-                            .map(Date::toString)
-                            .orElse(null), ReservationDTO::setDate);
+                    // mapeo el turno
+                    mapper.using(appointmentToActivityDTOConverter)
+                            .map(Reservation::getAppointment, ReservationDTO::setAppointmentDTO);
 
-                    mapper.map(source -> Optional.ofNullable(source.getTime())
-                            .map(Time::toString)
-                            .orElse(null), ReservationDTO::setTime);
                 }
         );
 
@@ -222,31 +330,28 @@ public class ConfigureMapper {
         /**
          * Mapear ReservationDTO a Reservation
          */
-        TypeMap<ReservationDTO, Reservation> reservationDTOToReservationMapping
+        TypeMap<ReservationDTO, Reservation> reservationDTOToReservationMapper
                 = modelMapper.createTypeMap(ReservationDTO.class, Reservation.class);
 
-        Converter<ActivityDTO, Activity> activityDTOToActivityConverter = context -> {
-            ActivityDTO source = context.getSource();
-            Activity destination = new Activity();
-            activityDTOToActivityMapping.map(source, destination);
+        Converter<AppointmentDTO, Appointment> appointmentDTOToActivityConverter = context -> {
+            AppointmentDTO source = context.getSource();
+            Appointment destination = new Appointment();
+            appointmentDTOToAppointmentMapper.map(source, destination);
             return destination;
         };
 
-        reservationDTOToReservationMapping.addMappings(
-                mapper -> {
-                    mapper.using(activityDTOToActivityConverter)
-                            .map(ReservationDTO::getActivityDTO, Reservation::setActivity);
 
+        reservationDTOToReservationMapper.addMappings(
+                mapper -> {
+
+                    // mapeo el usuario DTO a usuario entidad
                     mapper.using(userDTOToUserConverter)
                             .map(ReservationDTO::getUserDTO, Reservation::setUser);
 
-                    mapper.map(source -> Optional.ofNullable(source.getDate())
-                            .map(dateString -> Date.valueOf(LocalDate.parse(dateString)))
-                            .orElse(null), Reservation::setDate);
+//                  mapeo appointment DTO a appointment entidad
+                    mapper.using(appointmentDTOToActivityConverter)
+                            .map(ReservationDTO::getAppointmentDTO, Reservation::setAppointment);
 
-                    mapper.map(source -> Optional.ofNullable(source.getTime())
-                            .map(timeString -> Time.valueOf(LocalTime.parse(timeString)))
-                            .orElse(null), Reservation::setTime);
 
                 }
         );

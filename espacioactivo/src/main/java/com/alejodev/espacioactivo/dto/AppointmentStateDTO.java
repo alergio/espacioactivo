@@ -6,22 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO de Reservation para la interaccion entre el cliente y el servidor.
- *
- * @author alejo
- * @version 1.0 21-04-2024
- */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ReservationDTO implements EntityIdentificatorDTO {
+public class AppointmentStateDTO {
 
     private Long id;
-    private UserDTO userDTO;
-    private AppointmentDTO appointmentDTO;
-    private boolean cancelled;
+    private String name;
 
 }

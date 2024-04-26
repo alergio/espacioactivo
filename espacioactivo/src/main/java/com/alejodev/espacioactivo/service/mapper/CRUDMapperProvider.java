@@ -1,12 +1,15 @@
 package com.alejodev.espacioactivo.service.mapper;
 
 import com.alejodev.espacioactivo.dto.ActivityDTO;
+import com.alejodev.espacioactivo.dto.AppointmentDTO;
 import com.alejodev.espacioactivo.dto.DisciplineDTO;
 import com.alejodev.espacioactivo.dto.ReservationDTO;
 import com.alejodev.espacioactivo.entity.Activity;
+import com.alejodev.espacioactivo.entity.Appointment;
 import com.alejodev.espacioactivo.entity.Discipline;
 import com.alejodev.espacioactivo.entity.Reservation;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
+import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
 import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import org.springframework.stereotype.Component;
@@ -65,6 +68,24 @@ public class CRUDMapperProvider {
         reservationCRUDMapper.setEntityClassNamePlural(reservationClassName + "s");
 
         return reservationCRUDMapper;
+
+    }
+
+
+    public static CRUDMapper<AppointmentDTO, Appointment> getAppointmentCRUDMapper(IAppointmentRepository appointmentRepository) {
+
+        CRUDMapper<AppointmentDTO, Appointment> appointmentCRUDMapper = new CRUDMapper<>();
+
+        Class<Appointment> appointmentClass = Appointment.class;
+        String appointmentClassName = appointmentClass.getSimpleName();
+
+        appointmentCRUDMapper.setRepository(appointmentRepository);
+        appointmentCRUDMapper.setDtoClass(AppointmentDTO.class);
+        appointmentCRUDMapper.setEntityClass(appointmentClass);
+        appointmentCRUDMapper.setEntityClassName(appointmentClassName);
+        appointmentCRUDMapper.setEntityClassNamePlural(appointmentClassName + "s");
+
+        return appointmentCRUDMapper;
 
     }
 

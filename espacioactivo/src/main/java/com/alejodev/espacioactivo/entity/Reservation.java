@@ -11,7 +11,7 @@ import java.sql.Time;
 
 
 /**
- * Reservas asociadas a un cliente y una actividad.
+ * Reservas asociadas a un cliente y un turno.
  *
  * @author alejo
  * @version 1.0 21-04-2024
@@ -28,15 +28,15 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date date;
-    private Time time;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "activity_id", nullable = false)
-    private Activity activity;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // aca tengo que ver como lo condiciono xq es solo para customers
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "appointment_id", nullable = false)
+    private Appointment appointment;
+
+    @Column(name = "is_cancelled")
+    private boolean cancelled;
 
 }

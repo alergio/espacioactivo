@@ -1,9 +1,11 @@
 package com.alejodev.espacioactivo.controller;
 
 import com.alejodev.espacioactivo.dto.ActivityDTO;
+import com.alejodev.espacioactivo.dto.AppointmentDTO;
 import com.alejodev.espacioactivo.dto.DisciplineDTO;
 import com.alejodev.espacioactivo.dto.ReservationDTO;
 import com.alejodev.espacioactivo.service.impl.ActivityService;
+import com.alejodev.espacioactivo.service.impl.AppointmentService;
 import com.alejodev.espacioactivo.service.impl.DisciplineService;
 import com.alejodev.espacioactivo.service.impl.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class ControllerTest {
     ActivityService activityService;
     @Autowired
     ReservationService reservationService;
+    @Autowired
+    AppointmentService appointmentService;
 
 
 
@@ -92,6 +96,28 @@ public class ControllerTest {
         return ResponseEntity.ok(reservationService.delete(id));
     }
 
+
+
+    @PostMapping("/appointment/create")
+    public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+        return ResponseEntity.ok(appointmentService.create(appointmentDTO));
+    }
+    @GetMapping("/appointment/{id}")
+    public ResponseEntity<?> getAppointment(@PathVariable Long id){
+        return ResponseEntity.ok(appointmentService.readById(id));
+    }
+    @GetMapping("/appointment/all")
+    public ResponseEntity<?> getAllAppointments(){
+        return ResponseEntity.ok(appointmentService.readAll());
+    }
+    @PutMapping("/appointment/update")
+    public ResponseEntity<?> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
+        return ResponseEntity.ok(appointmentService.update(appointmentDTO));
+    }
+    @DeleteMapping("/appointment/delete/{id}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long id){
+        return ResponseEntity.ok(appointmentService.delete(id));
+    }
 
 
 
