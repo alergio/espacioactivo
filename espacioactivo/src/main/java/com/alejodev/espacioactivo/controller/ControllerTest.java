@@ -91,6 +91,10 @@ public class ControllerTest {
     public ResponseEntity<?> updateReservation(@RequestBody ReservationDTO reservationDTO){
         return ResponseEntity.ok(reservationService.update(reservationDTO));
     }
+    @PutMapping("/reservation/cancel/{id}")
+    public ResponseEntity<?> cancelReservation(@PathVariable Long id){
+        return ResponseEntity.ok(reservationService.cancelReservation(id));
+    }
     @DeleteMapping("/reservation/delete/{id}")
     public ResponseEntity<?> deleteReservation(@PathVariable Long id){
         return ResponseEntity.ok(reservationService.delete(id));
@@ -110,6 +114,12 @@ public class ControllerTest {
     public ResponseEntity<?> getAllAppointments(){
         return ResponseEntity.ok(appointmentService.readAll());
     }
+
+    @GetMapping("/appointment/unexpired/all")
+    public ResponseEntity<?> getAllUnexpiredAppointments(){
+        return ResponseEntity.ok(appointmentService.readAllUnexpired());
+    }
+
     @PutMapping("/appointment/update")
     public ResponseEntity<?> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
         return ResponseEntity.ok(appointmentService.update(appointmentDTO));

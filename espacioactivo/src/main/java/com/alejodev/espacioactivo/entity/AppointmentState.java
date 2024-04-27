@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 /**
  * Tabla que va hacer referencia a los posibles estados de un turno.
  *
@@ -26,5 +28,19 @@ public class AppointmentState {
 
     @Enumerated(EnumType.STRING)
     private AppointmentStateType name;
+
+    // Implementación de equals() y hashCode()
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppointmentState appointmentState = (AppointmentState) o;
+        return Objects.equals(id, appointmentState.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

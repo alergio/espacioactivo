@@ -2,16 +2,18 @@ package com.alejodev.espacioactivo.service.mapper;
 
 import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
+import com.alejodev.espacioactivo.entity.Appointment;
 import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.IGenericRepository;
+import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import lombok.*;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -99,18 +101,12 @@ public class CRUDMapper <T, E> implements ICRUDService {
 
     }
 
-
     /**
-     * Metodo generico para buscar todos los datos de una entidad que haya en la BD.
-     * Si hay, mapeamos la lista de entidades a una lista de DTO para mandarsela al cliente.
-     * @return -> ResponseDTO que llega al cliente
+     * Metodo privado local para usar en los readAll con y sin condiciones.
+     * @param responseDTO
+     * @param entityList
      */
-    @Override
-    public ResponseDTO readAll(){
-
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<E> entityList = repository.findAll();
-
+    private void entityListResolver(ResponseDTO responseDTO, List<E> entityList) {
         if (!entityList.isEmpty()){
 
             List<T> entityDTOList = entityList.stream()
@@ -126,6 +122,38 @@ public class CRUDMapper <T, E> implements ICRUDService {
         } else {
             throw new ResourceNotFoundException(entityClassNamePlural);
         }
+    }
+
+
+    /**
+     * Metodo generico para buscar todos los datos de una entidad que haya en la BD.
+     * Si hay, mapeamos la lista de entidades a una lista de DTO para mandarsela al cliente.
+     * @return -> ResponseDTO que llega al cliente
+     */
+    @Override
+    public ResponseDTO readAll(){
+
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<E> entityList = repository.findAll();
+
+        entityListResolver(responseDTO, entityList);
+
+        return responseDTO;
+
+    }
+
+
+    public ResponseDTO readAllWithCondition(ReadAllCondition readAllCondition) {
+
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<E> entityList = new ArrayList<>();
+
+        if (readAllCondition == ReadAllCondition.UNEXPIRED) {
+            IAppointmentRepository appointmentRepository = (IAppointmentRepository) repository;
+            entityList = (List<E>) appointmentRepository.findUnexpiredAppointments();
+        }
+
+        entityListResolver(responseDTO, entityList);
 
         return responseDTO;
 

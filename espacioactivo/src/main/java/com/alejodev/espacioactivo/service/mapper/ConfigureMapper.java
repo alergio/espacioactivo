@@ -186,7 +186,7 @@ public class ConfigureMapper {
                 return destination;
             };
 
-        Converter<AppointmentState, AppointmentStateDTO> appointmentStateToApoointmentStateDTOConverter
+        Converter<AppointmentState, AppointmentStateDTO> appointmentStateToAppointmentStateDTOConverter
                 = context -> {
             AppointmentState source = context.getSource();
             AppointmentStateDTO destination = new AppointmentStateDTO();
@@ -218,7 +218,7 @@ public class ConfigureMapper {
                             .orElse(null), AppointmentDTO::setTime);
 
                     // mapeo el estado
-                    mapper.using(appointmentStateToApoointmentStateDTOConverter)
+                    mapper.using(appointmentStateToAppointmentStateDTOConverter)
                             .map(Appointment::getAppointmentState, AppointmentDTO::setAppointmentStateDTO);
 
                 }
@@ -355,6 +355,21 @@ public class ConfigureMapper {
 
                 }
         );
+
+
+
+        // ---------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------- //
+
+
+        /**
+         * Mapear AppointmentState a AppointmentStateDTO
+         */
+        TypeMap<AppointmentState, AppointmentStateDTO> appointmentStateToAppointmentStateDTOMapper
+                = modelMapper.createTypeMap(AppointmentState.class, AppointmentStateDTO.class);
+
+        appointmentStateToAppointmentStateDTOMapper
+                .setConverter(appointmentStateToAppointmentStateDTOConverter);
 
 
 

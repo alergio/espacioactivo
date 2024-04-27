@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Objects;
 
 
 /**
@@ -32,11 +33,26 @@ public class Reservation {
     @JoinColumn(name = "user_id", nullable = false)
     private User user; // aca tengo que ver como lo condiciono xq es solo para customers
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointment appointment;
 
     @Column(name = "is_cancelled")
     private boolean cancelled;
+
+
+    // Implementación de equals() y hashCode()
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation reservation = (Reservation) o;
+        return Objects.equals(id, reservation.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 }

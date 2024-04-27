@@ -12,7 +12,7 @@ import com.alejodev.espacioactivo.dto.ResponseDTO;
  * @param <T> algun DTO.
  */
 public interface ICRUDService<T> {
-    ResponseDTO create (EntityIdentificatorDTO entityDTO);
+    ResponseDTO create (EntityIdentificatorDTO entityDTO) throws Exception;
 
     ResponseDTO readById(Long id);
 

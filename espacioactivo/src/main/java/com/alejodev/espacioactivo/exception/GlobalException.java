@@ -30,10 +30,10 @@ public class GlobalException {
 
         ResponseDTO response = new ResponseDTO();
 
-        response.setMessage("An unexpected error occurred on the server. Exception: " + ex.getClass().getSimpleName());
+        response.setMessage("An unexpected error occurred on the server. Exception: " + ex.getClass().getSimpleName() + " Ex Msg: " + ex.getMessage());
         response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-        LOGGER.error("ERROR 500: An unexpected error (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
+        LOGGER.error("ERROR 500: An unexpected error (" + ex.getClass().getSimpleName() + ") occurred on the server. Msg: " + ex.getMessage() + " Trace:", ex);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 
@@ -76,6 +76,20 @@ public class GlobalException {
         LOGGER.error("ERROR 404: Resource Not Found Exception. Exception Msg: " + ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
+    }
+
+    @ExceptionHandler(AppointmentStateException.class)
+    public ResponseEntity<Object> appointmentStateEx(AppointmentStateException ex) {
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.CONFLICT.value());
+        response.setMessage("ERROR 409: The Appointment is not available. Exception Msg: " + ex.getMessage());
+
+        LOGGER.error("ERROR 409: The Appointment is not available. Exception Msg: " + ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 
     }
 
