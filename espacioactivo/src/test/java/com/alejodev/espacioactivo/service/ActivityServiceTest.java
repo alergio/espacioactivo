@@ -35,13 +35,18 @@ public class ActivityServiceTest {
     @BeforeAll
     void setUpData() {
 
+        // voy a usar todos los datos precargados que estan en el script de datos
+        // los asocio solamente con el id
+
         ActivityDTO activityDTOForCreate = new ActivityDTO();
 
+        // customer raul
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(6L);
+        userDTO.setId(1L);
 
+        // clases grupales de yoga
         DisciplineDTO disciplineDTO = new DisciplineDTO();
-        disciplineDTO.setId(3L);
+        disciplineDTO.setId(2L);
 
         AddressDTO addressDTO = new AddressDTO();
         addressDTO.setStreet("Av Italia");
@@ -85,8 +90,8 @@ public class ActivityServiceTest {
 
         String expected = "ResponseDTO(statusCode=200, message=Activity saved successfully., " +
                 "data={Activity=ActivityDTO(id=" + activityID + ", price=200, maxPeople=5, " +
-                "disciplineDTO=DisciplineDTO(id=3, name=null, type=null), " +
-                "userDTO=UserDTO(id=6, firstname=null, lastname=null, email=null, " +
+                "disciplineDTO=DisciplineDTO(id=2, name=null, type=null), " +
+                "userDTO=UserDTO(id=1, firstname=null, lastname=null, email=null, " +
                 "registrationDate=null, isEnabled=false, roles=[]), " +
                 "addressDTO=AddressDTO(id=" + addressID + ", street=Av Italia, " +
                 "number=1377, state=Montevideo))})";
@@ -100,8 +105,8 @@ public class ActivityServiceTest {
 
         String expected = "ResponseDTO(statusCode=200, message=Activity updated successfully., " +
                 "data={Activity=ActivityDTO(id=" + activityID + ", price=120, maxPeople=25, " +
-                "disciplineDTO=DisciplineDTO(id=3, name=null, type=null), " +
-                "userDTO=UserDTO(id=6, firstname=null, lastname=null, email=null, " +
+                "disciplineDTO=DisciplineDTO(id=2, name=null, type=null), " +
+                "userDTO=UserDTO(id=1, firstname=null, lastname=null, email=null, " +
                 "registrationDate=null, isEnabled=false, roles=[]), addressDTO=AddressDTO" +
                 "(id=" + addressID + ", street=Dionisio Lopez, number=2291, state=Montevideo))})";
         assertEquals(expected, activityDTOResponseUpdate.toString());
@@ -114,9 +119,9 @@ public class ActivityServiceTest {
 
         String expected = "ResponseDTO(statusCode=200, message=Activity successfully found." +
                 ", data={Activity=ActivityDTO(id=" + activityID + ", price=120, maxPeople=25, " +
-                "disciplineDTO=DisciplineDTO(id=3, name=Futbol, type=SPACE_RENTAL), " +
-                "userDTO=UserDTO(id=6, firstname=Alejo, lastname=Maya, email=alejo@mail.com, " +
-                "registrationDate=2024-04-21, isEnabled=true, roles=[RoleDTO(id=1, name=ROLE_CUSTOMER)]), " +
+                "disciplineDTO=DisciplineDTO(id=2, name=Yoga, type=GROUP_CLASS), " +
+                "userDTO=UserDTO(id=1, firstname=Raul, lastname=Pereira, email=customer_raul@test.com, " +
+                "registrationDate=2024-04-20, isEnabled=true, roles=[RoleDTO(id=1, name=ROLE_CUSTOMER)]), " +
                 "addressDTO=AddressDTO(id=" + addressID + ", street=Dionisio Lopez, number=2291, state=Montevideo))})";
         assertEquals(expected, activityDTOResponseReadById.toString());
 
@@ -126,11 +131,11 @@ public class ActivityServiceTest {
     @Order(4)
     void delete() {
 
-        String expected = "ResponseDTO(statusCode=200, message=Activity deleted succesfully., " +
-                "data={Activity=ActivityDTO(id=" + activityID + ", price=120, maxPeople=25, " +
-                "disciplineDTO=DisciplineDTO(id=3, name=Futbol, type=SPACE_RENTAL), " +
-                "userDTO=UserDTO(id=6, firstname=Alejo, lastname=Maya, email=alejo@mail.com, " +
-                "registrationDate=2024-04-21, isEnabled=true, roles=[RoleDTO(id=1, name=ROLE_CUSTOMER)]), " +
+        String expected = "ResponseDTO(statusCode=200, message=Activity deleted succesfully." +
+                ", data={Activity=ActivityDTO(id=" + activityID + ", price=120, maxPeople=25, " +
+                "disciplineDTO=DisciplineDTO(id=2, name=Yoga, type=GROUP_CLASS), " +
+                "userDTO=UserDTO(id=1, firstname=Raul, lastname=Pereira, email=customer_raul@test.com, " +
+                "registrationDate=2024-04-20, isEnabled=true, roles=[RoleDTO(id=1, name=ROLE_CUSTOMER)]), " +
                 "addressDTO=AddressDTO(id=" + addressID + ", street=Dionisio Lopez, number=2291, state=Montevideo))})";
         assertEquals(expected, activityDTOResponseDelete.toString());
 
