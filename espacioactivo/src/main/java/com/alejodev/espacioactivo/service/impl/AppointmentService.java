@@ -4,31 +4,32 @@ import com.alejodev.espacioactivo.dto.*;
 import com.alejodev.espacioactivo.entity.Appointment;
 import com.alejodev.espacioactivo.entity.AppointmentState;
 import com.alejodev.espacioactivo.entity.AppointmentStateType;
+import com.alejodev.espacioactivo.exception.AppointmentIsFullException;
 import com.alejodev.espacioactivo.exception.AppointmentStateException;
-import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentStateRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
-import com.alejodev.espacioactivo.service.mapper.ConfigureMapper;
 import com.alejodev.espacioactivo.service.mapper.ReadAllCondition;
 import jakarta.annotation.PostConstruct;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getAppointmentCRUDMapper;
 import static com.alejodev.espacioactivo.service.mapper.ConfigureMapper.configureMapper;
+import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @Service
 public class AppointmentService implements ICRUDService<AppointmentDTO> {
 
+    @Autowired
+    private TransactionTemplate transactionTemplate;
     @Autowired
     private IAppointmentRepository appointmentRepository;
     @Autowired
@@ -73,7 +74,7 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
         return crudMapper.readAllWithCondition(ReadAllCondition.UNEXPIRED);
     }
 
-    public AppointmentDTO setUnavailableAppointmentState(Long appointmentId){
+    public AppointmentDTO setUnavailableAppointmentState(Long appointmentId, boolean isFull){
 
         AppointmentDTO appointmentDTO = (AppointmentDTO) crudMapper.readById(appointmentId).getData().get("Appointment");
         String appointmentStateDTOName
@@ -82,15 +83,14 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
         switch (AppointmentStateType.valueOf(appointmentStateDTOName)) {
 
             case AVAILABLE -> {
-
                 AppointmentState unavailableState
                         = appointmentStateRepository.findByName(AppointmentStateType.UNAVAILABLE);
                 AppointmentStateDTO unavaiableStateDTO
                         = modelMapper.map(unavailableState, AppointmentStateDTO.class);
                 appointmentDTO.setAppointmentStateDTO(unavaiableStateDTO);
+                appointmentDTO.setFull(isFull);
                 ResponseDTO appointmentDTOResponse = crudMapper.update(appointmentDTO);
                 return (AppointmentDTO) appointmentDTOResponse.getData().get("Appointment");
-
             }
 
             case UNAVAILABLE, EXPIRED ->
@@ -103,7 +103,8 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
     }
 
 
-    public ReservationDTO setAppointmentFromCancelledReservationToAvailable(ReservationDTO reservationDTO) {
+
+    public ReservationDTO setAppointmentToAvailableFromCancelledReservation(ReservationDTO reservationDTO) {
 
         AppointmentDTO appointmentDTO = reservationDTO.getAppointmentDTO();
         String appointmentState = appointmentDTO.getAppointmentStateDTO().getName();
@@ -116,6 +117,7 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
                     = modelMapper.map(availableState, AppointmentStateDTO.class);
 
             appointmentDTO.setAppointmentStateDTO(availableStateDTO);
+            appointmentDTO.setFull(false);
 
             AppointmentDTO appointmentDTOUpdated =
                     (AppointmentDTO) crudMapper.update(appointmentDTO).getData().get("Appointment");
@@ -132,20 +134,53 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
     public void checkAppointmentsToMarkAsExpired(){
 
         List <Appointment> appointmentsToBeExpired = appointmentRepository.findCandidateAppointmentsToBeExpired();
-        long appointmentsCount = (long) appointmentsToBeExpired.size();
+        long appointmentsCount = appointmentsToBeExpired.size();
 
         if (appointmentsCount > 0) {
             AppointmentState expiredState = appointmentStateRepository.findByName(AppointmentStateType.EXPIRED);
             LOGGER.info("Se encontraron " + appointmentsCount + " turnos para expirar.");
 
-            appointmentsToBeExpired.forEach(appointment -> {
-                appointment.setAppointmentState(expiredState);
-            });
+            appointmentsToBeExpired.forEach(appointment -> appointment.setAppointmentState(expiredState));
 
             appointmentRepository.saveAll(appointmentsToBeExpired);
         } else {
             LOGGER.info("No se encontraron turnos para expirar.");
         }
+
+    }
+
+
+    public AppointmentDTO checkIfIsFullToCreateReservation(Long appointmentId, Long totalReserves) {
+
+        AppointmentDTO appointmentDTO =
+                (AppointmentDTO) readById(appointmentId).getData().get("Appointment");
+
+        int maxPeople = appointmentDTO.getMaxPeople();
+
+        String appointmentStateDTOName
+                = appointmentDTO.getAppointmentStateDTO().getName();
+
+        switch (AppointmentStateType.valueOf(appointmentStateDTOName)) {
+
+            case AVAILABLE -> {
+                if (totalReserves < maxPeople) {
+                    if (maxPeople - totalReserves == 1) {
+                        // se llena el ultimo cupo
+                        appointmentDTO = setUnavailableAppointmentState(appointmentId, true);
+                    }
+                    return appointmentDTO;
+                } else {
+                    setUnavailableAppointmentState(appointmentId, true);
+                    throw new AppointmentIsFullException();
+                }
+            }
+
+            case UNAVAILABLE, EXPIRED ->
+                    throw new AppointmentStateException(AppointmentStateType.valueOf(appointmentStateDTOName));
+
+        }
+
+        return null;
 
     }
 

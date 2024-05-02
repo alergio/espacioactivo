@@ -1,9 +1,7 @@
 package com.alejodev.espacioactivo.service.impl;
 
 import com.alejodev.espacioactivo.dto.*;
-import com.alejodev.espacioactivo.entity.AppointmentStateType;
 import com.alejodev.espacioactivo.entity.Reservation;
-import com.alejodev.espacioactivo.exception.AppointmentStateException;
 import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
@@ -34,13 +32,16 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
         crudMapper = getReservationCRUDMapper(reservationRepository);
     }
 
-    @Transactional
+//    @Transactional
     @Override
     public ResponseDTO create(EntityIdentificatorDTO reservationDTO) {
 
         ReservationDTO reservationDTORequest = (ReservationDTO) reservationDTO;
+
         Long appointmentId = reservationDTORequest.getAppointmentDTO().getId();
-        AppointmentDTO appointmentDTO = appointmentService.setUnavailableAppointmentState(appointmentId);
+        Long totalReserves = reservationRepository.findAllReservationsByAppointment(appointmentId);
+
+        AppointmentDTO appointmentDTO = appointmentService.checkIfIsFullToCreateReservation(appointmentId, totalReserves);
 
         reservationDTORequest.setAppointmentDTO(appointmentDTO);
         return crudMapper.create(reservationDTORequest);
@@ -78,7 +79,7 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
 
         crudMapper.update(reservationDTO);
         ReservationDTO reservationDTOUpdated =
-                appointmentService.setAppointmentFromCancelledReservationToAvailable(reservationDTO);
+                appointmentService.setAppointmentToAvailableFromCancelledReservation(reservationDTO);
 
         response.setStatusCode(HttpStatus.OK.value());
         response.setMessage("Reservation cancelled successfully.");

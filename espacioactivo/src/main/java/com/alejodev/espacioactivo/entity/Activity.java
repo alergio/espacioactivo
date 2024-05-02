@@ -29,7 +29,6 @@ public class Activity {
     private Long id;
 
     private Integer price;
-    private Integer maxPeople;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "discipline_id", nullable = false)

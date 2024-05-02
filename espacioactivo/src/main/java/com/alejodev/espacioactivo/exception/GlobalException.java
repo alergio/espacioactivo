@@ -1,6 +1,7 @@
 package com.alejodev.espacioactivo.exception;
 
 import com.alejodev.espacioactivo.dto.ResponseDTO;
+import org.apache.coyote.Response;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -50,14 +51,15 @@ public class GlobalException {
 
         ResponseDTO response = new ResponseDTO();
 
-        response.setMessage("An error has occurred on the server, there are conflicts with the integrity of the data you sent.");
         response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage("An error has occurred on the server, there are conflicts with the integrity of the data you sent.");
 
         LOGGER.error("ERROR 400: BAD REQUEST (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
     }
+
 
 
     /**
@@ -79,18 +81,47 @@ public class GlobalException {
 
     }
 
-    @ExceptionHandler(AppointmentStateException.class)
-    public ResponseEntity<Object> appointmentStateEx(AppointmentStateException ex) {
+    private ResponseEntity<Object> appointmentNotAvailable(Exception ex, String entity) {
 
         ResponseDTO response = new ResponseDTO();
 
         response.setStatusCode(HttpStatus.CONFLICT.value());
-        response.setMessage("ERROR 409: The Appointment is not available. Exception Msg: " + ex.getMessage());
+        response.setMessage("ERROR 409: The " + entity + " is not available. Exception Msg: " + ex.getMessage());
 
-        LOGGER.error("ERROR 409: The Appointment is not available. Exception Msg: " + ex.getMessage());
+        LOGGER.error("ERROR 409: The " + entity + " is not available. Exception Msg: " + ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 
     }
+
+    @ExceptionHandler(AppointmentStateException.class)
+    public ResponseEntity<Object> appointmentStateEx(AppointmentStateException ex) {
+        return appointmentNotAvailable(ex, "Appointment");
+    }
+
+    @ExceptionHandler(AppointmentIsFullException.class)
+    public ResponseEntity<Object> appointmentFullEx(AppointmentIsFullException ex) {
+        return appointmentNotAvailable(ex, "Appointment");
+    }
+
+    @ExceptionHandler(DisciplineAlreadyExistsException.class)
+    public ResponseEntity<Object> disciplineAlreadyExistsEx(DisciplineAlreadyExistsException ex) {
+        return appointmentNotAvailable(ex, "Discipline");
+    }
+
+    @ExceptionHandler(DisciplineWrongTypeException.class)
+    public ResponseEntity<Object> disciplineWrongTypeEx(DisciplineWrongTypeException ex) {
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage("There is a problem with the data you are sending. Msg: " + ex.getMessage());
+
+        LOGGER.error("ERROR 400: BAD REQUEST (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
+
 
 }

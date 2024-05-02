@@ -21,7 +21,6 @@ public class ActivityDTO implements EntityIdentificatorDTO {
 
     private Long id;
     private Integer price;
-    private Integer maxPeople;
     private DisciplineDTO disciplineDTO;
     private UserDTO userDTO;
     private AddressDTO addressDTO;

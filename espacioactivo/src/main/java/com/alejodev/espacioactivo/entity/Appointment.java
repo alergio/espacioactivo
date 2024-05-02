@@ -30,6 +30,9 @@ public class Appointment {
 
     private Date date;
     private Time time;
+    @Column(name = "is_Full")
+    private boolean isFull;
+    private Integer maxPeople;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state_id", nullable = false)

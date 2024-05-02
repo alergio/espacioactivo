@@ -87,17 +87,16 @@ ON DUPLICATE KEY UPDATE
 
 
 -- actividades
-INSERT INTO activity (id, max_people, price, address_id, discipline_id, user_id)
+INSERT INTO activity (id, price, address_id, discipline_id, user_id)
 VALUES
-	(1, 1, 2000, 1, 1, 5),
-	(2, 10, 300, 2, 2, 6),
-	(3, 1, 500, 3, 3, 6),
-	(4, 15, 100, 4, 4, 7),
-    (5, 8, 300, 5, 5, 7),
-    (6, 8, 200, 6, 6, 7)
-	AS new_values(id, max_people, price, address_id, discipline_id, user_id)
+	(1, 2000, 1, 1, 5),
+	(2, 300, 2, 2, 6),
+	(3, 500, 3, 3, 6),
+	(4, 100, 4, 4, 7),
+    (5, 300, 5, 5, 7),
+    (6, 200, 6, 6, 7)
+	AS new_values(id, price, address_id, discipline_id, user_id)
  ON DUPLICATE KEY UPDATE
-     max_people = new_values.max_people,
      price = new_values.price,
      address_id = new_values.address_id,
      discipline_id = new_values.discipline_id,
@@ -119,64 +118,66 @@ ON DUPLICATE KEY UPDATE
 
 
 
-    -- turnos
-INSERT INTO appointment (id, date, time, activity_id, state_id)
+-- turnos
+INSERT INTO appointment (id, date, time, max_people, is_full, activity_id, state_id)
 VALUES
 
     -- turnos para alquiler de cancha de futbol para maniana y pasado
-	(1, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '17:00:00', 1, 1),
-	(2, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 1, 1),
-	(3, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '19:00:00', 1, 1),
-	(4, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '20:00:00', 1, 1),
-    (5, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '21:00:00', 1, 1),
-    (6, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '22:00:00', 1, 1),
-	(8, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 1, 1),
-    (7, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '17:00:00', 1, 1),
-	(9, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '19:00:00', 1, 1),
-	(10, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '20:00:00', 1, 1),
-    (11, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '21:00:00', 1, 1),
-    (12, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '22:00:00', 1, 1),
+	(1, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '17:00:00', 1, false, 1, 1),
+	(2, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 1, false, 1, 1),
+	(3, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '19:00:00', 1, false, 1, 1),
+	(4, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '20:00:00', 1, false, 1, 1),
+    (5, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '21:00:00', 1, false, 1, 1),
+    (6, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '22:00:00', 1, false, 1, 1),
+	(8, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 1, false, 1, 1),
+    (7, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '17:00:00', 1, false, 1, 1),
+	(9, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '19:00:00', 1, false, 1, 1),
+	(10, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '20:00:00', 1, false, 1, 1),
+    (11, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '21:00:00', 1, false, 1, 1),
+    (12, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '22:00:00', 1, false, 1, 1),
 
 
     -- turnos para inscribirse a clases grupales de yoga toda la semana
-    (13, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 2, 1),
-	(14, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 2, 1),
-	(15, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '18:00:00', 2, 1),
-	(16, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 4 DAY), '%Y-%m-%d'), '18:00:00', 2, 1),
-    (17, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY), '%Y-%m-%d'), '18:00:00', 2, 1),
-    (18, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '18:00:00', 2, 1),
+    (13, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 2, 1),
+	(14, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 2, 1),
+	(15, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 2, 1),
+	(16, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 4 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 2, 1),
+    (17, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 2, 1),
+    (18, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 2, 1),
 
 
     -- turnos para entrenamiento personalizado, varios horarios para varios dias
-    (19, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 3, 1),
-	(20, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '19:00:00', 3, 1),
-	(21, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '17:00:00', 3, 1),
-	(22, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 3, 1),
-    (23, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '19:00:00', 3, 1),
-    (24, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '20:00:00', 3, 1),
+    (19, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 1, false, 3, 1),
+	(20, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '19:00:00', 1, false, 3, 1),
+	(21, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '17:00:00', 1, false, 3, 1),
+	(22, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 1, false, 3, 1),
+    (23, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '19:00:00', 1, false, 3, 1),
+    (24, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '20:00:00', 1, false, 3, 1),
 
 
     -- turnos para clases grupales de tennis
-    (25, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 5, 1),
-	(26, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '21:00:00', 5, 1),
-	(27, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 5, 1),
-	(28, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '21:00:00', 5, 1),
-    (29, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '18:00:00', 5, 1),
-    (30, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '21:00:00', 5, 1),
+    (25, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 5, 1),
+	(26, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '21:00:00', 3, false, 5, 1),
+	(27, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 5, 1),
+	(28, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '21:00:00', 3, false, 5, 1),
+    (29, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '18:00:00', 5, false, 5, 1),
+    (30, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '21:00:00', 3, false, 5, 1),
 
 
     -- turnos para clases grupales de boxeo
-    (31, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '21:00:00', 6, 1),
-	(32, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '21:00:00', 6, 1),
-	(33, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '21:00:00', 6, 1),
-	(34, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 4 DAY), '%Y-%m-%d'), '21:00:00', 6, 1),
-    (35, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY), '%Y-%m-%d'), '21:00:00', 6, 1),
-    (36, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 6, 1)
+    (31, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 DAY), '%Y-%m-%d'), '21:00:00', 5, false, 6, 1),
+	(32, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 2 DAY), '%Y-%m-%d'), '21:00:00', 5, false, 6, 1),
+	(33, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '21:00:00', 5, false, 6, 1),
+	(34, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 4 DAY), '%Y-%m-%d'), '21:00:00', 5, false, 6, 1),
+    (35, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY), '%Y-%m-%d'), '21:00:00', 5, false, 6, 1),
+    (36, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 5, false, 6, 1)
 
-	AS new_values(id, date, time, activity_id, state_id)
+	AS new_values(id, date, time, max_people, is_full, activity_id, state_id)
     ON DUPLICATE KEY UPDATE
      date = new_values.date,
      time = new_values.time,
+     max_people = new_values.max_people,
+     is_full = new_values.is_full,
      activity_id = new_values.activity_id,
      state_id = new_values.state_id
      ;
