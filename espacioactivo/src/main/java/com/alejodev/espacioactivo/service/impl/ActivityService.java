@@ -43,7 +43,7 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         if (discipline.isPresent()) {
             return crudMapper.create(activityDTO);
         } else {
-            throw new DataIntegrityVExceptionWithMsg("The discipline you are sending is not found (404).");
+            throw new DataIntegrityVExceptionWithMsg("Discipline");
         }
 
     }

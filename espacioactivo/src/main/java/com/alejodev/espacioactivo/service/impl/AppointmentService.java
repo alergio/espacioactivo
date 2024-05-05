@@ -1,11 +1,14 @@
 package com.alejodev.espacioactivo.service.impl;
 
 import com.alejodev.espacioactivo.dto.*;
+import com.alejodev.espacioactivo.entity.Activity;
 import com.alejodev.espacioactivo.entity.Appointment;
 import com.alejodev.espacioactivo.entity.AppointmentState;
 import com.alejodev.espacioactivo.entity.AppointmentStateType;
 import com.alejodev.espacioactivo.exception.AppointmentIsFullException;
 import com.alejodev.espacioactivo.exception.AppointmentStateException;
+import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg;
+import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentStateRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
@@ -16,24 +19,21 @@ import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import java.util.List;
+import java.util.Optional;
 
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getAppointmentCRUDMapper;
 import static com.alejodev.espacioactivo.service.mapper.ConfigureMapper.configureMapper;
-import static org.springframework.transaction.annotation.Propagation.REQUIRES_NEW;
 
 @Service
 public class AppointmentService implements ICRUDService<AppointmentDTO> {
 
     @Autowired
-    private TransactionTemplate transactionTemplate;
-    @Autowired
     private IAppointmentRepository appointmentRepository;
     @Autowired
     private IAppointmentStateRepository appointmentStateRepository;
+    @Autowired
+    private IActivityRepository activityRepository;
     private CRUDMapper<AppointmentDTO, Appointment> crudMapper;
 
     private final Logger LOGGER = Logger.getLogger(AppointmentService.class);
@@ -46,7 +46,23 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
 
     @Override
     public ResponseDTO create(EntityIdentificatorDTO appointmentDTO) {
+
+        AppointmentDTO appointmentDTORequest = (AppointmentDTO) appointmentDTO;
+        Optional<Activity> activity =
+                activityRepository.findById(appointmentDTORequest.getActivityDTO().getId());
+        Optional<AppointmentState> appointmentState =
+                appointmentStateRepository.findById(appointmentDTORequest.getAppointmentStateDTO().getId());
+
+        if (activity.isEmpty()) {
+            throw new DataIntegrityVExceptionWithMsg("Activity");
+        }
+
+        if (appointmentState.isEmpty()) {
+            throw new DataIntegrityVExceptionWithMsg("Appointment State");
+        }
+
         return crudMapper.create(appointmentDTO);
+
     }
 
     @Override

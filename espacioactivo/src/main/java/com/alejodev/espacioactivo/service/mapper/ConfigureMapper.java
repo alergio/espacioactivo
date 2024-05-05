@@ -105,9 +105,12 @@ public class ConfigureMapper {
 
         Converter<User, UserDTO> userToUserDTOConverter = context -> {
             User source = context.getSource();
-            UserDTO destination = new UserDTO();
-            userToUserDTOMapper.map(source, destination);
-            return destination;
+            if (source != null) {
+                UserDTO destination = new UserDTO();
+                userToUserDTOMapper.map(source, destination);
+                return destination;
+            }
+            return null;
         };
 
         activityToActivityDTOMapper.addMappings(
@@ -136,22 +139,28 @@ public class ConfigureMapper {
 
         Converter<UserDTO, User> userDTOToUserConverter = context -> {
             UserDTO source = context.getSource();
-            User destination = new User();
-            userDTOToUserMapper.map(source, destination);
-            return destination;
+            if (source != null) {
+                User destination = new User();
+                userDTOToUserMapper.map(source, destination);
+                return destination;
+            }
+            return null;
         };
 
         Converter<DisciplineDTO, Discipline> disciplineDTOToDisciplineConverter = context -> {
             DisciplineDTO source = context.getSource();
-            Discipline destination = new Discipline();
+            if (source != null) {
+                Discipline destination = new Discipline();
 
-            Optional.ofNullable(source.getId()).ifPresent(destination::setId);
-            Optional.ofNullable(source.getName()).ifPresent(destination::setName);
-            Optional.ofNullable(source.getType())
-                    .map(DisciplineType::valueOf)
-                    .ifPresent(destination::setType);
+                Optional.ofNullable(source.getId()).ifPresent(destination::setId);
+                Optional.ofNullable(source.getName()).ifPresent(destination::setName);
+                Optional.ofNullable(source.getType())
+                        .map(DisciplineType::valueOf)
+                        .ifPresent(destination::setType);
 
-            return destination;
+                return destination;
+            }
+            return null;
         };
 
         activityDTOToActivityMapper.addMappings(

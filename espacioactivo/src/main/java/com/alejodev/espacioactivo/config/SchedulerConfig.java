@@ -14,7 +14,6 @@ public class SchedulerConfig {
     @Autowired
     AppointmentService appointmentService;
 
-
     @Scheduled(cron = "0 0 * * * *")
     public void updateAppointments() throws InterruptedException {
         appointmentService.checkAppointmentsToMarkAsExpired();
