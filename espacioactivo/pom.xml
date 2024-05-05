@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.alejodev</groupId>
 	<artifactId>espacioactivo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>espacioactivo</name>
 	<description>Espacio Activo Project</description>
 	<properties>

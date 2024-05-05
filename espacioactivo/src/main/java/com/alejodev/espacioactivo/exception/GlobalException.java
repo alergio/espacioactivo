@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalException {
 
-    Logger LOGGER = Logger.getLogger(GlobalException.class);
+    private final Logger LOGGER = Logger.getLogger(GlobalException.class);
+    private final String dataIntegrityErrorMsg =
+            "An error has occurred on the server, there are conflicts with the integrity of the data you sent.";
 
 
     /**
@@ -52,7 +54,21 @@ public class GlobalException {
         ResponseDTO response = new ResponseDTO();
 
         response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        response.setMessage("An error has occurred on the server, there are conflicts with the integrity of the data you sent.");
+        response.setMessage(dataIntegrityErrorMsg);
+
+        LOGGER.error("ERROR 400: BAD REQUEST (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
+
+    @ExceptionHandler(DataIntegrityVExceptionWithMsg.class)
+    public ResponseEntity<Object> handleDataIntegrityVExceptionWithMsg(Exception ex) {
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(dataIntegrityErrorMsg + " Msg: " + ex.getMessage());
 
         LOGGER.error("ERROR 400: BAD REQUEST (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
 
