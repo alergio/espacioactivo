@@ -28514,3 +28514,5 @@ Caused by: java.nio.channels.ClosedChannelException
 	at org.apache.coyote.Response.doWrite(Response.java:618)
 	at org.apache.catalina.connector.OutputBuffer.realWriteBytes(OutputBuffer.java:329)
 	... 106 more
+[2024-05-0515:20:23] [ ERROR] [GlobalException:94] ERROR 404: Resource Not Found Exception. Exception Msg: Error: Appointment not found.
+[2024-05-0515:22:10] [ ERROR] [GlobalException:94] ERROR 404: Resource Not Found Exception. Exception Msg: Error: Appointment not found.

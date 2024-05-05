@@ -31,8 +31,7 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
     private void setUpCrudMapper(){
         crudMapper = getReservationCRUDMapper(reservationRepository);
     }
-
-//    @Transactional
+    
     @Override
     public ResponseDTO create(EntityIdentificatorDTO reservationDTO) {
 
