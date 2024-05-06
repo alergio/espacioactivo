@@ -29693,3 +29693,17 @@ org.springframework.security.authentication.AuthenticationCredentialsNotFoundExc
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 [2024-05-0522:51:58] [ INFO ] [CRUDMapper:121] Request to see all Activities completed successfully.
+[2024-05-0523:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0523:25:46] [ INFO ] [CRUDMapper:121] Request to see all Activities completed successfully.
+[2024-05-0523:34:38] [ INFO ] [CRUDMapper:121] Request to see all Activities completed successfully.
+[2024-05-0600:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0610:24:11] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0611:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0612:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0613:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0614:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0615:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0616:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0617:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0618:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.
+[2024-05-0619:00:00] [ INFO ] [AppointmentService:163] No se encontraron turnos para expirar.

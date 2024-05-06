@@ -137,9 +137,9 @@ public class ControllerTest {
 //        return ResponseEntity.ok(appointmentService.readById(id));
 //    }
 
-    @GetMapping("/requestdiscipline/allbyuserid/{id}")
-    public ResponseEntity<?> getAllRequestDisciplineByUserId(@PathVariable Long id){
-        return ResponseEntity.ok(requestToCreateDisciplineService.readAllByUserId(id));
+    @GetMapping("/requestdiscipline/allbyuser")
+    public ResponseEntity<?> getAllRequestDisciplineByUserId(){
+        return ResponseEntity.ok(requestToCreateDisciplineService.readAllByUser());
     }
     @GetMapping("/requestdiscipline/all")
     public ResponseEntity<?> getAllRequestDiscipline(){

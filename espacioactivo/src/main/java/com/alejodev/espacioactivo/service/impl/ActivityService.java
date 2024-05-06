@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getUserName;
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getActivityCRUDMapper;
 
 @Service
@@ -77,20 +78,8 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERNAME, userName);
     }
 
-    private String getUserName() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Verificar si el usuario está autenticado
-        if (authentication != null && authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return userDetails.getUsername();
-        } else {
-            throw new AuthenticationCredentialsNotFoundException("");
-        }
-
-    }
 
 
-    
+
+
 }

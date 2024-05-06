@@ -8,8 +8,12 @@ import com.alejodev.espacioactivo.repository.impl.ITokenRepository;
 import com.alejodev.espacioactivo.repository.impl.IUserRepository;
 import com.alejodev.espacioactivo.security.config.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -99,6 +103,20 @@ public class AuthenticationService {
         token.setUser(user);
 
         tokenRepository.save(token);
+
+    }
+
+    public static String getUserName() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verificar si el usuario está autenticado
+        if (authentication != null && authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return userDetails.getUsername();
+        } else {
+            throw new AuthenticationCredentialsNotFoundException("");
+        }
 
     }
 

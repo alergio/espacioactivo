@@ -149,24 +149,25 @@ public class CRUDMapper <T, E> implements ICRUDService {
         ResponseDTO responseDTO = new ResponseDTO();
         List<E> entityList = new ArrayList<>();
 
-        if (readAllCondition == ReadAllCondition.APPOINTMENTS_UNEXPIRED) {
-            IAppointmentRepository appointmentRepository = (IAppointmentRepository) repository;
-            entityList = (List<E>) appointmentRepository.findUnexpiredAppointments();
-        }
+        switch (readAllCondition) {
+            case APPOINTMENTS_UNEXPIRED -> {
+                IAppointmentRepository appointmentRepository = (IAppointmentRepository) repository;
+                entityList = (List<E>) appointmentRepository.findUnexpiredAppointments();
+            }
 
-        if (readAllCondition == ReadAllCondition.REQUESTS_BY_USER_ID) {
-            IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository =
-                    (IRequestToCreateDisciplineRepository) repository;
-            entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUserId((Long) data);
-        }
+            case DISCIPLINE_REQUESTS_BY_USERNAME -> {
+                IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository =
+                        (IRequestToCreateDisciplineRepository) repository;
+                entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((String) data);
+            }
 
-        if (readAllCondition == ReadAllCondition.ACTIVITIES_BY_USERNAME) {
-            IActivityRepository activityRepository = (IActivityRepository) repository;
-            entityList = (List<E>) activityRepository.findAllActivitiesByUser((String) data);
+            case ACTIVITIES_BY_USERNAME -> {
+                IActivityRepository activityRepository = (IActivityRepository) repository;
+                entityList = (List<E>) activityRepository.findAllActivitiesByUser((String) data);
+            }
         }
 
         entityListResolver(responseDTO, entityList);
-
         return responseDTO;
 
     }
