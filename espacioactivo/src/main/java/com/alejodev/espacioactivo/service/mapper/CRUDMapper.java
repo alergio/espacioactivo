@@ -2,10 +2,11 @@ package com.alejodev.espacioactivo.service.mapper;
 
 import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
-import com.alejodev.espacioactivo.entity.Appointment;
 import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.IGenericRepository;
+import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
+import com.alejodev.espacioactivo.repository.impl.IRequestToCreateDisciplineRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import lombok.*;
 import org.apache.log4j.Logger;
@@ -143,14 +144,25 @@ public class CRUDMapper <T, E> implements ICRUDService {
     }
 
 
-    public ResponseDTO readAllWithCondition(ReadAllCondition readAllCondition) {
+    public ResponseDTO readAllWithCondition(ReadAllCondition readAllCondition, Object data) {
 
         ResponseDTO responseDTO = new ResponseDTO();
         List<E> entityList = new ArrayList<>();
 
-        if (readAllCondition == ReadAllCondition.UNEXPIRED) {
+        if (readAllCondition == ReadAllCondition.APPOINTMENTS_UNEXPIRED) {
             IAppointmentRepository appointmentRepository = (IAppointmentRepository) repository;
             entityList = (List<E>) appointmentRepository.findUnexpiredAppointments();
+        }
+
+        if (readAllCondition == ReadAllCondition.REQUESTS_BY_USER_ID) {
+            IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository =
+                    (IRequestToCreateDisciplineRepository) repository;
+            entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUserId((Long) data);
+        }
+
+        if (readAllCondition == ReadAllCondition.ACTIVITIES_BY_USERNAME) {
+            IActivityRepository activityRepository = (IActivityRepository) repository;
+            entityList = (List<E>) activityRepository.findAllActivitiesByUser((String) data);
         }
 
         entityListResolver(responseDTO, entityList);

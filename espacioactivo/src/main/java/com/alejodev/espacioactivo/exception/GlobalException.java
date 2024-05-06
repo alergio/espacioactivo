@@ -1,11 +1,11 @@
 package com.alejodev.espacioactivo.exception;
 
 import com.alejodev.espacioactivo.dto.ResponseDTO;
-import org.apache.coyote.Response;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -125,8 +125,8 @@ public class GlobalException {
         return appointmentNotAvailable(ex, "Discipline");
     }
 
-    @ExceptionHandler(DisciplineWrongTypeException.class)
-    public ResponseEntity<Object> disciplineWrongTypeEx(DisciplineWrongTypeException ex) {
+    @ExceptionHandler(WrongTypeException.class)
+    public ResponseEntity<Object> WrongTypeEx(WrongTypeException ex) {
 
         ResponseDTO response = new ResponseDTO();
 
@@ -136,6 +136,20 @@ public class GlobalException {
         LOGGER.error("ERROR 400: BAD REQUEST (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<Object> AuthenticationNotFoundException(AuthenticationCredentialsNotFoundException ex) {
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        response.setMessage("No authenticated user found.");
+
+        LOGGER.error("ERROR 401: UNAUTHORIZED (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 
     }
 

@@ -1,13 +1,7 @@
 package com.alejodev.espacioactivo.controller;
 
-import com.alejodev.espacioactivo.dto.ActivityDTO;
-import com.alejodev.espacioactivo.dto.AppointmentDTO;
-import com.alejodev.espacioactivo.dto.DisciplineDTO;
-import com.alejodev.espacioactivo.dto.ReservationDTO;
-import com.alejodev.espacioactivo.service.impl.ActivityService;
-import com.alejodev.espacioactivo.service.impl.AppointmentService;
-import com.alejodev.espacioactivo.service.impl.DisciplineService;
-import com.alejodev.espacioactivo.service.impl.ReservationService;
+import com.alejodev.espacioactivo.dto.*;
+import com.alejodev.espacioactivo.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +17,8 @@ public class ControllerTest {
     ReservationService reservationService;
     @Autowired
     AppointmentService appointmentService;
+    @Autowired
+    RequestToCreateDisciplineService requestToCreateDisciplineService;
 
 
 
@@ -129,6 +125,40 @@ public class ControllerTest {
         return ResponseEntity.ok(appointmentService.delete(id));
     }
 
+
+
+
+    @PostMapping("/requestdiscipline/create")
+    public ResponseEntity<?> createRequestDiscipline(@RequestBody RequestToCreateDisciplineDTO requestToCreateDisciplineDTO) {
+        return ResponseEntity.ok(requestToCreateDisciplineService.create(requestToCreateDisciplineDTO));
+    }
+//    @GetMapping("/appointment/{id}")
+//    public ResponseEntity<?> getAppointment(@PathVariable Long id){
+//        return ResponseEntity.ok(appointmentService.readById(id));
+//    }
+
+    @GetMapping("/requestdiscipline/allbyuserid/{id}")
+    public ResponseEntity<?> getAllRequestDisciplineByUserId(@PathVariable Long id){
+        return ResponseEntity.ok(requestToCreateDisciplineService.readAllByUserId(id));
+    }
+    @GetMapping("/requestdiscipline/all")
+    public ResponseEntity<?> getAllRequestDiscipline(){
+        return ResponseEntity.ok(requestToCreateDisciplineService.readAll());
+    }
+//
+//    @GetMapping("/appointment/unexpired/all")
+//    public ResponseEntity<?> getAllUnexpiredAppointments(){
+//        return ResponseEntity.ok(appointmentService.readAllUnexpired());
+//    }
+//
+//    @PutMapping("/appointment/update")
+//    public ResponseEntity<?> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
+//        return ResponseEntity.ok(appointmentService.update(appointmentDTO));
+//    }
+//    @DeleteMapping("/appointment/delete/{id}")
+//    public ResponseEntity<?> deleteAppointment(@PathVariable Long id){
+//        return ResponseEntity.ok(appointmentService.delete(id));
+//    }
 
 
 

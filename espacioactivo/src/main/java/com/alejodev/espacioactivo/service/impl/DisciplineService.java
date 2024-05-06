@@ -6,7 +6,7 @@ import com.alejodev.espacioactivo.dto.ResponseDTO;
 import com.alejodev.espacioactivo.entity.Discipline;
 import com.alejodev.espacioactivo.entity.DisciplineType;
 import com.alejodev.espacioactivo.exception.DisciplineAlreadyExistsException;
-import com.alejodev.espacioactivo.exception.DisciplineWrongTypeException;
+import com.alejodev.espacioactivo.exception.WrongTypeException;
 import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
@@ -44,18 +44,9 @@ public class DisciplineService implements ICRUDService<DisciplineDTO> {
 
         DisciplineDTO disciplineDTORequest = (DisciplineDTO) disciplineDTO;
 
-        if (EnumUtils.isValidEnum(DisciplineType.class, disciplineDTORequest.getType())) {
-            Optional<Discipline> discipline =
-                    disciplineRepository.findIfExistsDiscipline(disciplineDTORequest.getName(), DisciplineType.valueOf(disciplineDTORequest.getType()));
+        validateDiscipline(disciplineDTORequest);
 
-            if (discipline.isPresent()) {
-                throw new DisciplineAlreadyExistsException();
-            } else {
-                return crudMapper.create(disciplineDTO);
-            }
-        } else {
-            throw new DisciplineWrongTypeException();
-        }
+        return crudMapper.create(disciplineDTO);
     }
 
     @Override
@@ -77,4 +68,24 @@ public class DisciplineService implements ICRUDService<DisciplineDTO> {
     public ResponseDTO delete(Long id) {
         return crudMapper.delete(id);
     }
+
+    public void validateDiscipline(DisciplineDTO disciplineDTO) {
+
+        if (!EnumUtils.isValidEnum(DisciplineType.class, disciplineDTO.getType())) {
+            throw new WrongTypeException("Discipline");
+        }
+
+        Optional<Discipline> discipline =
+                disciplineRepository.findIfExistsDiscipline(
+                        disciplineDTO.getName(), DisciplineType.valueOf(disciplineDTO.getType())
+                );
+
+        if (discipline.isPresent()) {
+            throw new DisciplineAlreadyExistsException();
+        }
+
+    }
+
+
+
 }

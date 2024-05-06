@@ -371,6 +371,7 @@ public class ConfigureMapper {
         // ---------------------------------------------------------------------------- //
 
 
+
         /**
          * Mapear AppointmentState a AppointmentStateDTO
          */
@@ -384,6 +385,60 @@ public class ConfigureMapper {
 
         // ---------------------------------------------------------------------------- //
         // ---------------------------------------------------------------------------- //
+
+
+
+        /**
+         * Mapear RequestToCreateDiscipline a RequestToCreateDisciplineDTO
+         */
+        TypeMap<RequestToCreateDiscipline, RequestToCreateDisciplineDTO>
+                RequestToCreateDisciplineToRequestToCreateDisciplineDTO =
+                modelMapper.createTypeMap(RequestToCreateDiscipline.class, RequestToCreateDisciplineDTO.class);
+
+        RequestToCreateDisciplineToRequestToCreateDisciplineDTO.addMappings(
+                mapper -> {
+                    // mapeo el usuario DTO a usuario entidad
+                    mapper.using(userToUserDTOConverter)
+                            .map(RequestToCreateDiscipline::getUser, RequestToCreateDisciplineDTO::setUserDTO);
+                }
+        );
+
+
+
+        // ---------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------- //
+
+
+
+        /**
+         * Mapear RequestToCreateDisciplineDTO a RequestToCreateDiscipline
+         */
+        TypeMap<RequestToCreateDisciplineDTO, RequestToCreateDiscipline>
+                RequestToCreateDisciplineDTOToRequestToCreateDiscipline =
+                modelMapper.createTypeMap(RequestToCreateDisciplineDTO.class, RequestToCreateDiscipline.class);
+
+        RequestToCreateDisciplineDTOToRequestToCreateDiscipline.addMappings(
+                mapper -> {
+                    // mapeo el usuario DTO a usuario entidad
+                    mapper.using(userDTOToUserConverter)
+                            .map(RequestToCreateDisciplineDTO::getUserDTO, RequestToCreateDiscipline::setUser);
+                }
+        );
+
+
+
+        // ---------------------------------------------------------------------------- //
+        // ---------------------------------------------------------------------------- //
+
+
+
+
+
+
+
+
+
+
 
 
 

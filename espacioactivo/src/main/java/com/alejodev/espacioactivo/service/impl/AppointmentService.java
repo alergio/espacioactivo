@@ -87,7 +87,7 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
 
 
     public ResponseDTO readAllUnexpired() {
-        return crudMapper.readAllWithCondition(ReadAllCondition.UNEXPIRED);
+        return crudMapper.readAllWithCondition(ReadAllCondition.APPOINTMENTS_UNEXPIRED, null);
     }
 
     public AppointmentDTO setUnavailableAppointmentState(Long appointmentId, boolean isFull){

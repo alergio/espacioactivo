@@ -1,45 +1,45 @@
 package com.alejodev.espacioactivo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alejodev.espacioactivo.dto.DisciplineDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.Objects;
 
-/**
- * Todas las disciplinas disponibles de la aplicacion, son su nombre y su tipo.
- *
- * @author alejo
- * @version 1.0 21-04-2024
- */
 @Entity
-@Table(name = "Discipline")
+@Table(name = "RequestToCreateDiscipline")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Discipline {
+public class RequestToCreateDiscipline {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    private String disciplineName;
 
     @Enumerated(EnumType.STRING)
-    private DisciplineType type;
+    private DisciplineType disciplineType;
 
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 
     // Implementación de equals() y hashCode()
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Discipline discipline = (Discipline) o;
-        return Objects.equals(id, discipline.id);
+        RequestToCreateDiscipline requestToCreateDiscipline = (RequestToCreateDiscipline) o;
+        return Objects.equals(id, requestToCreateDiscipline.id);
     }
 
     @Override
@@ -48,3 +48,4 @@ public class Discipline {
     }
 
 }
+

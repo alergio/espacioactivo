@@ -1,17 +1,8 @@
 package com.alejodev.espacioactivo.service.mapper;
 
-import com.alejodev.espacioactivo.dto.ActivityDTO;
-import com.alejodev.espacioactivo.dto.AppointmentDTO;
-import com.alejodev.espacioactivo.dto.DisciplineDTO;
-import com.alejodev.espacioactivo.dto.ReservationDTO;
-import com.alejodev.espacioactivo.entity.Activity;
-import com.alejodev.espacioactivo.entity.Appointment;
-import com.alejodev.espacioactivo.entity.Discipline;
-import com.alejodev.espacioactivo.entity.Reservation;
-import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
-import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
-import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
-import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
+import com.alejodev.espacioactivo.dto.*;
+import com.alejodev.espacioactivo.entity.*;
+import com.alejodev.espacioactivo.repository.impl.*;
 import org.springframework.stereotype.Component;
 
 
@@ -86,6 +77,28 @@ public class CRUDMapperProvider {
         appointmentCRUDMapper.setEntityClassNamePlural(appointmentClassName + "s");
 
         return appointmentCRUDMapper;
+
+    }
+
+
+    public static CRUDMapper<RequestToCreateDisciplineDTO, RequestToCreateDiscipline> getRequestToCreateDisciplineCrudMapper
+            (IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository) {
+
+        CRUDMapper<RequestToCreateDisciplineDTO, RequestToCreateDiscipline>
+                RequestToCreateDisciplineCrudMapper = new CRUDMapper<>();
+
+        Class<RequestToCreateDiscipline> RequestToCreateDisciplineClass
+                = RequestToCreateDiscipline.class;
+
+        String RequestToCreateDisciplineClassName = RequestToCreateDisciplineClass.getSimpleName();
+
+        RequestToCreateDisciplineCrudMapper.setRepository(requestToCreateDisciplineRepository);
+        RequestToCreateDisciplineCrudMapper.setDtoClass(RequestToCreateDisciplineDTO.class);
+        RequestToCreateDisciplineCrudMapper.setEntityClass(RequestToCreateDisciplineClass);
+        RequestToCreateDisciplineCrudMapper.setEntityClassName(RequestToCreateDisciplineClassName);
+        RequestToCreateDisciplineCrudMapper.setEntityClassNamePlural(RequestToCreateDisciplineClassName + "s");
+
+        return RequestToCreateDisciplineCrudMapper;
 
     }
 

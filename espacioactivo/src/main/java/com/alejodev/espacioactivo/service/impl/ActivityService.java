@@ -10,9 +10,13 @@ import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
+import com.alejodev.espacioactivo.service.mapper.ReadAllCondition;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -67,4 +71,26 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
     public ResponseDTO delete(Long id) {
         return crudMapper.delete(id);
     }
+
+    public ResponseDTO readAllByUser(){
+        String userName = getUserName();
+        return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERNAME, userName);
+    }
+
+    private String getUserName() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verificar si el usuario está autenticado
+        if (authentication != null && authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return userDetails.getUsername();
+        } else {
+            throw new AuthenticationCredentialsNotFoundException("");
+        }
+
+    }
+
+
+    
 }

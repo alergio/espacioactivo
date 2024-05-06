@@ -20,24 +20,27 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthfilter;
     private final CustomLogoutHandler logoutHandler;
+    private final String apiVersion = "/api/v1";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers(
-                                "**").permitAll());
-//                        .requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
-//                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER")
-//                        .anyRequest().authenticated())
-//                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthfilter, UsernamePasswordAuthenticationFilter.class)
-//                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
-//                        .addLogoutHandler(logoutHandler)
-//                        .logoutSuccessHandler(
-//                                ((request, response, authentication) -> SecurityContextHolder.clearContext())
-//                        ));
+                                apiVersion + "/auth/**").permitAll()
+                        .requestMatchers(apiVersion + "/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                        .requestMatchers(apiVersion + "/user/**").hasAnyAuthority("ROLE_USER")
+                        .requestMatchers(apiVersion + "/coach/**").hasAnyAuthority("ROLE_COACH")
+                        .requestMatchers(apiVersion + "/space-renter/**").hasAnyAuthority("ROLE_SPACE_RENTER")
+                        .anyRequest().authenticated())
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthfilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler(
+                                ((request, response, authentication) -> SecurityContextHolder.clearContext())
+                        ));
 
         return httpSecurity.build();
     }
