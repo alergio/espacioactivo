@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/api/v1/coach/activity")
-public class ActivityController {
+public class ActivityCoachController {
 
     @Autowired
     ActivityService activityService;
@@ -21,7 +21,12 @@ public class ActivityController {
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllActivities(){
-        return ResponseEntity.ok(activityService.readAllByUser());
+        return ResponseEntity.ok(activityService.readAllByCoach());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateActivity(@RequestBody ActivityDTO activityDTO) {
+        return ResponseEntity.ok(activityService.updateByCoach(activityDTO));
     }
 
 

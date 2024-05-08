@@ -7,7 +7,7 @@ import com.alejodev.espacioactivo.entity.AppointmentState;
 import com.alejodev.espacioactivo.entity.AppointmentStateType;
 import com.alejodev.espacioactivo.exception.AppointmentIsFullException;
 import com.alejodev.espacioactivo.exception.AppointmentStateException;
-import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg;
+import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithNotFoundEx;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentStateRepository;
@@ -54,11 +54,11 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
                 appointmentStateRepository.findById(appointmentDTORequest.getAppointmentStateDTO().getId());
 
         if (activity.isEmpty()) {
-            throw new DataIntegrityVExceptionWithMsg("Activity");
+            throw new DataIntegrityVExceptionWithNotFoundEx("Activity");
         }
 
         if (appointmentState.isEmpty()) {
-            throw new DataIntegrityVExceptionWithMsg("Appointment State");
+            throw new DataIntegrityVExceptionWithNotFoundEx("Appointment State");
         }
 
         return crudMapper.create(appointmentDTO);

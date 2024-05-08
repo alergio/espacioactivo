@@ -62,6 +62,20 @@ public class GlobalException {
 
     }
 
+    @ExceptionHandler(DataIntegrityVExceptionWithNotFoundEx.class)
+    public ResponseEntity<Object> handleDataIntegrityVExceptionWithNotFoundEx(Exception ex) {
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        response.setMessage(dataIntegrityErrorMsg + " Msg: " + ex.getMessage());
+
+        LOGGER.error("ERROR 400: BAD REQUEST (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
+
     @ExceptionHandler(DataIntegrityVExceptionWithMsg.class)
     public ResponseEntity<Object> handleDataIntegrityVExceptionWithMsg(Exception ex) {
 
@@ -75,6 +89,7 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
     }
+
 
 
 

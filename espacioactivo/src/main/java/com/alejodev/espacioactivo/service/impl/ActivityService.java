@@ -1,11 +1,14 @@
 package com.alejodev.espacioactivo.service.impl;
 
 import com.alejodev.espacioactivo.dto.ActivityDTO;
+import com.alejodev.espacioactivo.dto.AddressDTO;
 import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
 import com.alejodev.espacioactivo.entity.Activity;
 import com.alejodev.espacioactivo.entity.Discipline;
 import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg;
+import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithNotFoundEx;
+import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
@@ -13,12 +16,9 @@ import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
 import com.alejodev.espacioactivo.service.mapper.ReadAllCondition;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getUserName;
@@ -48,7 +48,7 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         if (discipline.isPresent()) {
             return crudMapper.create(activityDTO);
         } else {
-            throw new DataIntegrityVExceptionWithMsg("Discipline");
+            throw new DataIntegrityVExceptionWithNotFoundEx("Discipline");
         }
 
     }
@@ -73,9 +73,54 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         return crudMapper.delete(id);
     }
 
-    public ResponseDTO readAllByUser(){
+    public ResponseDTO readAllByCoach(){
         String userName = getUserName();
         return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERNAME, userName);
+    }
+
+
+    public ResponseDTO updateByCoach(ActivityDTO activityDTORequest) {
+
+        Long activityId = activityDTORequest.getId();
+        AddressDTO addressDTO = activityDTORequest.getAddressDTO();
+
+        if (addressDTO == null && activityDTORequest.getPrice() == null) {
+
+            throw new DataIntegrityVExceptionWithMsg("Address and price cannot both be empty.");
+
+        } else {
+
+            ActivityDTO activityDTOForUpdate = null;
+
+            ResponseDTO responseForAllActivities = readAllByCoach();
+            List<ActivityDTO> activitiesDTO = (List<ActivityDTO>) responseForAllActivities.getData().get("Activities");
+
+            for(ActivityDTO activity : activitiesDTO) {
+                if(activity.getId().equals(activityId)){
+                    activityDTOForUpdate = activity;
+                    break;
+                }
+            }
+
+            if (activityDTOForUpdate != null) {
+
+                if(addressDTO != null){
+                    activityDTOForUpdate.setAddressDTO(addressDTO);
+                }
+
+                if(activityDTORequest.getPrice() != null) {
+                    activityDTOForUpdate.setPrice(activityDTORequest.getPrice());
+                }
+
+                return update(activityDTOForUpdate);
+
+            } else {
+                throw new ResourceNotFoundException("Activity");
+            }
+
+        }
+
+
     }
 
 
