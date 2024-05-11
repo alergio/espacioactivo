@@ -92,30 +92,6 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         return create(activityDTO);
     }
 
-    private static void activityDataValidator(ActivityDTO activityDTO) {
-
-        Long userId = getAuthenticatedUserId();
-
-        if (activityDTO.getUserDTO() == null || activityDTO.getUserDTO().getId() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty userDTO or userDTO.id field.");
-        }
-
-        if (!activityDTO.getUserDTO().getId().equals(userId)) {
-            throw new InvalidUserException();
-        }
-
-        if (activityDTO.getAddressDTO() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO field.");
-        }
-
-        if (activityDTO.getAddressDTO().getState() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO.state field.");
-        }
-
-        if (activityDTO.getPrice() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty price field.");
-        }
-    }
 
 
     public ResponseDTO updateByServiceProvider(ActivityDTO activityDTORequest) {
@@ -175,5 +151,33 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         }
     }
 
+
+    private static void activityDataValidator(ActivityDTO activityDTO) {
+
+        Long userId = getAuthenticatedUserId();
+
+        if (activityDTO.getUserDTO() == null || activityDTO.getUserDTO().getId() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty userDTO or userDTO.id field.");
+        }
+
+        if (!activityDTO.getUserDTO().getId().equals(userId)) {
+            throw new InvalidUserException();
+        }
+
+        if (activityDTO.getAddressDTO() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO field.");
+        }
+
+        if (activityDTO.getAddressDTO().getState() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO.state field.");
+        }
+
+        if (activityDTO.getPrice() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty price field.");
+        }
+    }
+
+
+    
 
 }
