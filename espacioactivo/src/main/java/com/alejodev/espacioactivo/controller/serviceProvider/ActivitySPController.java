@@ -1,4 +1,4 @@
-package com.alejodev.espacioactivo.controller.coach;
+package com.alejodev.espacioactivo.controller.serviceProvider;
 
 import com.alejodev.espacioactivo.dto.ActivityDTO;
 import com.alejodev.espacioactivo.service.impl.ActivityService;
@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/api/v1/service-provider/activity")
-public class ActivityServiceProviderController {
+public class ActivitySPController {
 
     @Autowired
     ActivityService activityService;
+
 
     @PostMapping("/create")
     public ResponseEntity<?> createActivity(@RequestBody ActivityDTO activityDTO) {

@@ -24,6 +24,7 @@ public class AppointmentDTO implements EntityIdentificatorDTO {
     private String time;
     private boolean isFull;
     private Integer maxPeople;
+    private Integer totalReserves;
     private ActivityDTO activityDTO;
     private AppointmentStateDTO appointmentStateDTO;
 

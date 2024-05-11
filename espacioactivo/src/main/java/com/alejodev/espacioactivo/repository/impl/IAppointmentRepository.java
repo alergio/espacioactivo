@@ -1,5 +1,6 @@
 package com.alejodev.espacioactivo.repository.impl;
 
+import com.alejodev.espacioactivo.entity.Activity;
 import com.alejodev.espacioactivo.entity.Appointment;
 import com.alejodev.espacioactivo.repository.IGenericRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,10 @@ public interface IAppointmentRepository extends IGenericRepository<Appointment, 
     @Query("SELECT a FROM Appointment a " +
             "WHERE a.appointmentState.name != 'EXPIRED'")
     List<Appointment> findUnexpiredAppointments();
+
+    @Query("SELECT ap FROM Appointment ap JOIN ap.activity ac " +
+            "WHERE ac.user.id = :userId")
+    List<Appointment> findAllAppointmentsByUserId(Long userId);
 
 }
 

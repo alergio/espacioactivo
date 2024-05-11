@@ -2,6 +2,7 @@ package com.alejodev.espacioactivo.service.impl;
 
 import com.alejodev.espacioactivo.dto.*;
 import com.alejodev.espacioactivo.entity.Reservation;
+import com.alejodev.espacioactivo.exception.MethodNotAllowedException;
 import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
@@ -31,16 +32,15 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
     private void setUpCrudMapper(){
         crudMapper = getReservationCRUDMapper(reservationRepository);
     }
-    
+
     @Override
     public ResponseDTO create(EntityIdentificatorDTO reservationDTO) {
 
         ReservationDTO reservationDTORequest = (ReservationDTO) reservationDTO;
 
         Long appointmentId = reservationDTORequest.getAppointmentDTO().getId();
-        Long totalReserves = reservationRepository.findAllReservationsByAppointment(appointmentId);
 
-        AppointmentDTO appointmentDTO = appointmentService.checkIfIsFullToCreateReservation(appointmentId, totalReserves);
+        AppointmentDTO appointmentDTO = appointmentService.checkIfIsFullToCreateReservation(appointmentId);
 
         reservationDTORequest.setAppointmentDTO(appointmentDTO);
         return crudMapper.create(reservationDTORequest);
@@ -73,6 +73,10 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
         ResponseDTO response = new ResponseDTO();
         ReservationDTO reservationDTO =
                 (ReservationDTO) crudMapper.readById(reservationID).getData().get("Reservation");
+
+        if (reservationDTO.isCancelled()) {
+            throw new MethodNotAllowedException("This reservation is already cancelled.");
+        }
 
         reservationDTO.setCancelled(true);
 

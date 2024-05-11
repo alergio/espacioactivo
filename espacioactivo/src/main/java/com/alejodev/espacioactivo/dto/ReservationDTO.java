@@ -1,10 +1,7 @@
 package com.alejodev.espacioactivo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * DTO de Reservation para la interaccion entre el cliente y el servidor.

@@ -28,6 +28,10 @@ back end EspacioActivo anotaciones
 TO-DO:
 
 
+
+		
+
+
 - roles, que hace cada rol: 
 
 	>> DOING THIS HIGH PRIORITY <<
@@ -36,13 +40,24 @@ TO-DO:
 		crea 
 		     > actividades  >>> LISTO <<< ????? no lo habia probado todavia.... o al menos no el controlador en postman  >> listo ahora si <<
 										hacer excepciones para todos los campos en caso de que esten vacios >> listo <<
-		     > appointments
-	   	     > solicitud de disciplinas
+		     
+			 > appointments >> LISTO <<
+									validaciones: . date -> tiene que ser mayor a hoy >> listo <<
+												  . time -> tiene que estar dentro de la franja horaria permitida >> listo <<
+												  . max-people -> tiene que ser mayor a 0 y menor a 25 >> listo <<
+												  . activityId > no puede ser empty y tiene que ser una que el service-provider creo >> listo <<
+												  . stateId > no puede ser empty >> listo<< > tiene que existir >> esto ya estaba en el create << >> listo <<
+								
+						
+	   	     
+			 > solicitud de disciplinas
 
 
 		lee
 		    > SUS actividades >>> LISTO <<<
-		    > SUS appointments
+			
+		    > SUS appointments >> hacer esto <<
+			
 		    > SUS solicitudes
 
 
@@ -55,12 +70,37 @@ TO-DO:
 					se probo mandando solo address y ok
 					se probo sin precio ni address y exception ok
 					probar si tiene 0 actividades >> ok <<
+					
+			>> SUS appointments >> hacer esto <<
+				date puede ser actualizada siempre y cuando sea igual o posterior a maniana
+				is_full puede ser modificado, ignorando el max_people
+				max_people puede ser modificado siempre y cuando el solicitado sea mayor o igual a su total de reservas
+												si es igual al total de reservas, el is_full va a quedar en true
+												tiene que tener ademas las validaciones de > 0 y < 25
+				el time puede ser modificado siempre y cuando este dentro de la franja horaria habilitada
+				puede cambiar el activity id solo si el que envia es igual a alguno que quien lo envia tenga creado
+				el state_id puede cambiar a unavailable
+						si cambia a unavailable y hay reservas asociadas, todas tienen que cambiar a cancelado
+							se podria hacer un nuevo campo que declare quien es el que cancelo la reserva (proveedor o customer)
+						el totalReserves y el isFull del appointment no cambia
+							
+				el state_id puede cambiar a available desde unavailable
+					si la fecha es <= a maniana
+					las reservas que tenia quedan canceladas
+					el totalReserves se re-inicializa en 0 y el isFull queda en false
+				
 
 
 		elimina
 			> SUS actividades >> LISTO <<
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
+			>> SUS appointments
+			
+			
+		que interaccion tiene con las reservas a sus appointments?
+			puede cancelarlas, y una vez que la cancela no lo puede revertir
+				si la cancela, hay que actualizar el "is full" y el totalReserves
 
 	Customer:
 
@@ -85,6 +125,21 @@ TO-DO:
 
 
 
+
+
+
+- hay que actualizar el securityConfiguration lo que puede acceder un admin quedo en /**
+
+
+- Notificaciones:
+	sucesos que deberian disparar notificaciones:
+		
+		- hacer una reserva > al usuario y al proveedor
+		- cancelar una reserva, ya sea por el usuario o por el proovedor y a ambos
+			diferenciar si fue una cancelacion personal o fue porque cambio el estado a unavailable del appointment
+		- si un appointment llega a estar full > al provedor
+		- si el appointment cambia a expirado > al provedor
+		
 
 
 - el proveedor de servicios tiene que poder solicitar crear una nueva disciplina
@@ -149,7 +204,7 @@ TO-DO:
 - un usuario tiene que pder solicitar converterse en un service-provider
 
 
-
+- to do sin prioridad: me quedo una query en IReservationRepository que justamente busca la cantidad de reservas en un turno
 
 
 
@@ -342,3 +397,12 @@ y otra para que no se pueda actualizar si el tipo no es de los tipos que existen
 - al crear la reserva tiene que existir el appointment >>> Esto esta listo, tira el 404 en el checkIfIsFullToCreateReservation <<<
 
 - configureMapper , roles en map activity to activityDTO >>> LISTO <<<
+
+- falta agregar una exception en el cancel de reservas, deja cancelar una reserva que ya esta cancelada >> LISTO <<
+
+>> agregar un count de reservas en Appointment <<  ---  >> LISTO <<
+		hay que ajustar entidad, dto y datos >> listo <<
+		tiene que contar las reservas concretadas y no canceladas >> listo <<
+		es decir cuando una reserva se cancela, debe restar un numero a ese total >> listo <<
+		cuando una reserva se crea debe aumentar un numero a ese total >> listo <<
+		el numero empieza en 0 al crear un appointment >> listo <<
