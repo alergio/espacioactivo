@@ -28,7 +28,7 @@ back end EspacioActivo anotaciones
 TO-DO:
 
 
-- roles, que hace cada rol:
+- roles, que hace cada rol: 
 
 	>> DOING THIS HIGH PRIORITY <<
 	
