@@ -35,6 +35,7 @@ TO-DO:
 	Service-Provider:
 		crea 
 		     > actividades  >>> LISTO <<< ????? no lo habia probado todavia.... o al menos no el controlador en postman  >> listo ahora si <<
+										hacer excepciones para todos los campos en caso de que esten vacios >> listo <<
 		     > appointments
 	   	     > solicitud de disciplinas
 

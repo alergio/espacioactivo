@@ -43,14 +43,19 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
     public ResponseDTO create(EntityIdentificatorDTO activityDTO) {
 
         ActivityDTO activityDTORequest = (ActivityDTO) activityDTO;
+
+        if (activityDTORequest.getDisciplineDTO() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty disciplineDTO field.");
+        }
+
         Optional<Discipline> discipline =
                 disciplineRepository.findById(activityDTORequest.getDisciplineDTO().getId());
 
-        if (discipline.isPresent()) {
-            return crudMapper.create(activityDTO);
-        } else {
+        if (discipline.isEmpty()) {
             throw new DataIntegrityVExceptionWithNotFoundEx("Discipline");
         }
+
+        return crudMapper.create(activityDTO);
 
     }
 
@@ -83,12 +88,32 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
     }
 
     public ResponseDTO createByServiceProvider(ActivityDTO activityDTO) {
+        activityDataValidator(activityDTO);
+        return create(activityDTO);
+    }
+
+    private static void activityDataValidator(ActivityDTO activityDTO) {
+
         Long userId = getAuthenticatedUserId();
 
-        if (activityDTO.getUserDTO().getId().equals(userId)) {
-            return create(activityDTO);
-        } else {
+        if (activityDTO.getUserDTO() == null || activityDTO.getUserDTO().getId() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty userDTO or userDTO.id field.");
+        }
+
+        if (!activityDTO.getUserDTO().getId().equals(userId)) {
             throw new InvalidUserException();
+        }
+
+        if (activityDTO.getAddressDTO() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO field.");
+        }
+
+        if (activityDTO.getAddressDTO().getState() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO.state field.");
+        }
+
+        if (activityDTO.getPrice() == null) {
+            throw new DataIntegrityVExceptionWithMsg("You can't send empty price field.");
         }
     }
 
