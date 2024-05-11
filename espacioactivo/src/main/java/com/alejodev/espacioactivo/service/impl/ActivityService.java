@@ -8,6 +8,7 @@ import com.alejodev.espacioactivo.entity.Activity;
 import com.alejodev.espacioactivo.entity.Discipline;
 import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg;
 import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithNotFoundEx;
+import com.alejodev.espacioactivo.exception.InvalidUserException;
 import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getUserName;
+import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getAuthenticatedUserId;
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getActivityCRUDMapper;
 
 @Service
@@ -73,15 +74,29 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         return crudMapper.delete(id);
     }
 
-    public ResponseDTO readAllByCoach(){
-        String userName = getUserName();
-        return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERNAME, userName);
+    public ResponseDTO readAllByServiceProvider(){
+        // este sale trae las que el creo
+
+        // esto ya valida que el usuario este logueado
+        Long userId = getAuthenticatedUserId();
+        return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERNAME, userId);
+    }
+
+    public ResponseDTO createByServiceProvider(ActivityDTO activityDTO) {
+        Long userId = getAuthenticatedUserId();
+
+        if (activityDTO.getUserDTO().getId().equals(userId)) {
+            return create(activityDTO);
+        } else {
+            throw new InvalidUserException();
+        }
     }
 
 
-    public ResponseDTO updateByCoach(ActivityDTO activityDTORequest) {
+    public ResponseDTO updateByServiceProvider(ActivityDTO activityDTORequest) {
 
-        Long activityId = activityDTORequest.getId();
+        // aca estoy condicionando para que solo pueda modificar los que son de el
+
         AddressDTO addressDTO = activityDTORequest.getAddressDTO();
 
         if (addressDTO == null && activityDTORequest.getPrice() == null) {
@@ -90,41 +105,50 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
 
         } else {
 
-            ActivityDTO activityDTOForUpdate = null;
+            Long activityId = activityDTORequest.getId();
+            ActivityDTO activityDTOForUpdate = getActivityDTOForUpdateOrDelete(activityId);
 
-            ResponseDTO responseForAllActivities = readAllByCoach();
-            List<ActivityDTO> activitiesDTO = (List<ActivityDTO>) responseForAllActivities.getData().get("Activities");
-
-            for(ActivityDTO activity : activitiesDTO) {
-                if(activity.getId().equals(activityId)){
-                    activityDTOForUpdate = activity;
-                    break;
-                }
+            if(addressDTO != null){
+                activityDTOForUpdate.setAddressDTO(addressDTO);
             }
 
-            if (activityDTOForUpdate != null) {
-
-                if(addressDTO != null){
-                    activityDTOForUpdate.setAddressDTO(addressDTO);
-                }
-
-                if(activityDTORequest.getPrice() != null) {
-                    activityDTOForUpdate.setPrice(activityDTORequest.getPrice());
-                }
-
-                return update(activityDTOForUpdate);
-
-            } else {
-                throw new ResourceNotFoundException("Activity");
+            if(activityDTORequest.getPrice() != null) {
+                activityDTOForUpdate.setPrice(activityDTORequest.getPrice());
             }
+
+            return update(activityDTOForUpdate);
 
         }
+    }
 
+
+    public ResponseDTO deleteByServiceProvider(Long activityId) {
+
+        ActivityDTO activityDTOForDelete = getActivityDTOForUpdateOrDelete(activityId);
+        return delete(activityDTOForDelete.getId());
 
     }
 
 
 
+    private ActivityDTO getActivityDTOForUpdateOrDelete(Long activityId) {
+        ActivityDTO activityDTO = null;
+
+        ResponseDTO responseForAllActivities = readAllByServiceProvider();
+        List<ActivityDTO> activitiesDTO = (List<ActivityDTO>) responseForAllActivities.getData().get("Activities");
+
+        for(ActivityDTO activity : activitiesDTO) {
+            if(activity.getId().equals(activityId)){
+                activityDTO = activity;
+                break;
+            }
+        }
+        if (activityDTO != null) {
+            return activityDTO;
+        } else {
+            throw new ResourceNotFoundException("Activity");
+        }
+    }
 
 
 }

@@ -2,8 +2,7 @@
 INSERT INTO role (id, name)
 VALUES
     (1, 'ROLE_CUSTOMER'),
-    (2, 'ROLE_SPACE_RENTER'),
-    (3, 'ROLE_COACH'),
+    (2, 'ROLE_SERVICE_PROVIDER'),
     (4, 'ROLE_ADMIN') AS new_values(id, name)
 ON DUPLICATE KEY UPDATE
     name = new_values.name;
@@ -43,8 +42,8 @@ VALUES
     (6, 1),
     (7, 1),
     (5, 2),
-    (6, 3),
-    (7, 3)
+    (6, 2),
+    (7, 2)
     AS new_values(user_id, role_id)
 ON DUPLICATE KEY UPDATE
     user_id = new_values.user_id,

@@ -168,5 +168,19 @@ public class GlobalException {
 
     }
 
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<Object> InvalidUserEx(InvalidUserException ex) {
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.FORBIDDEN.value());
+        response.setMessage("The user sent in the body of the request is not the same user authenticated in the application.");
+
+        LOGGER.error("ERROR 403: FORBIDDEN (" + ex.getClass().getSimpleName() + ") occurred on the server. Trace:", ex);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+
+    }
+
 
 }

@@ -29,9 +29,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> request.requestMatchers(
                                 apiVersion + "/auth/**").permitAll()
                         .requestMatchers(apiVersion + "/admin/**").hasAnyAuthority("ROLE_ADMIN")
-                        .requestMatchers(apiVersion + "/user/**").hasAnyAuthority("ROLE_USER")
-                        .requestMatchers(apiVersion + "/coach/**").hasAnyAuthority("ROLE_COACH")
-                        .requestMatchers(apiVersion + "/space-renter/**").hasAnyAuthority("ROLE_SPACE_RENTER")
+                        .requestMatchers(apiVersion + "/customer/**").hasAnyAuthority("ROLE_CUSTOMER")
+                        .requestMatchers(apiVersion + "/service-provider/**").hasAnyAuthority("ROLE_SERVICE_PROVIDER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

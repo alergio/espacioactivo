@@ -16,7 +16,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getUserName;
+import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getAuthenticatedUserId;
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getRequestToCreateDisciplineCrudMapper;
 
 /**
@@ -82,8 +82,8 @@ public class RequestToCreateDisciplineService implements ICRUDService<RequestToC
     }
 
     public ResponseDTO readAllByUser() {
-        String userName = getUserName();
-        return crudMapper.readAllWithCondition(ReadAllCondition.DISCIPLINE_REQUESTS_BY_USERNAME, userName);
+        Long userId = getAuthenticatedUserId();
+        return crudMapper.readAllWithCondition(ReadAllCondition.DISCIPLINE_REQUESTS_BY_USERNAME, userId);
     }
 
 

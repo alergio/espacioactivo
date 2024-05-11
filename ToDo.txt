@@ -1,0 +1,343 @@
+hacer una aplicacion de control de gastos
+
+posiblemente descartar esta de turnos para hacer uno de reserva de habitacion hoteles
+aunque esto puede ser complejo porque tiene que incluir pagos
+
+el sistema podria ser una plataforma de distintos deportes donde se ofrecen distintas cosas por ej reserva de canchas para alquilar, o reserva de clases de x disciplina con un profesor etc
+	- esto podria tener un chat con websocket
+
+MENTALIZARME
+ESTUDIAR PARA PODER CAMBIAR DE TRABAJO !!
+
+- buscar sobre JavaDoc
+- implementar login (seguridad) /// LISTO
+- falta el logout // LISTO
+- como guardar el jwt en cookies desde el servidor
+- agregar OAuth2
+
+
+en algun otro proyecto se puede integrar websocket
+	INTEGRAR WEB SOCKET
+
+
+back end EspacioActivo anotaciones
+
+
+
+
+TO-DO:
+
+
+- roles, que hace cada rol:
+
+	>> DOING THIS HIGH PRIORITY <<
+	
+	Service-Provider:
+		crea 
+		     > actividades  >>> LISTO <<< ????? no lo habia probado todavia.... o al menos no el controlador en postman  >> listo ahora si <<
+		     > appointments
+	   	     > solicitud de disciplinas
+
+
+		lee
+		    > SUS actividades >>> LISTO <<<
+		    > SUS appointments
+		    > SUS solicitudes
+
+
+		actualiza
+			> SUS actividades 	>>> LISTO <<<
+				(deberia solamente poder actualizar precio y address, testear esto)
+					se testeo que puede actualizar mandando solo el precio y el id y anda bien
+					tambien mandar un id a una actividad que no le pertenece
+					se probo modificando address y precio, hay que mandarle la id y modifica la que ya existe
+					se probo mandando solo address y ok
+					se probo sin precio ni address y exception ok
+					probar si tiene 0 actividades >> ok <<
+
+
+		elimina
+			> SUS actividades >> LISTO <<
+		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
+
+
+	Customer:
+
+		crea
+
+		lee
+
+		actualiza
+
+		elimina
+
+
+	Admin:
+
+		crea
+
+		lee
+
+		actualiza
+
+		elimina
+
+
+
+
+
+- el proveedor de servicios tiene que poder solicitar crear una nueva disciplina
+	tiene que tener el rol de coach o space renter. un customer comun no puede hacerlo
+
+	>> DOING THIS <<
+	
+	primer warning: si tiene mismo nombre y mismo tipo no debe dejar >> LISTO <<
+		(esto creo que ya esta atajado pero en el CREATE, atajar en la solicitud tambien) >> LISTO <<
+	
+	ya esta diagramado, el usuario va a CREAR una solicitud para crear una nueva disciplina >> LISTO <<
+		esta solicitud va a tener dentro una disciplina, sin relacion con las disciplinas existentes ya que seria una nueva. >> LISTO <<
+			el usuario que la envia  (1 usuario puede enviar n solicitudes) >> LISTO <<
+			y un estado (en espera, aprobado, rechazado) >> LISTO <<
+
+		la solicitud tiene que tener una disciplina valida, esto se tiene que validar >> LISTO <<
+
+		esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
+		en caso de ser aprobada, se dara de alta una nueva disciplina
+		en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
+			en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
+				aca capaz sea necesario integrar websocket
+
+	el usuario puede:
+		crear una solicitud  >> LISTO <<
+
+		leer SUS solicitudes >> A MEDIAS <<
+			ATENCION: aca lo que hice fue leer todos las solicitudes del id de un usuario
+				pero no hice ninguna limitacion para que sean las del usuario que lo solicita
+				eso lo voy a tener que estudiar cuando implemente la seguridad
+			
+			REVISAR ESTO AHORA !!! PORQUE ES ALGO QUE QUIERO APLICAR PARA OTRAS ENTIDADES
+			UN USUARIO SOLO PUEDE ACCEDER A LOS DATOS QUE LE CORRESPONDEN A ESE USUARIO Y NO A OTROS USUARIOS
+			PROBABLEMENTE VA A SER NECESARIO HACER USO DEL TOKEN
+				
+			>>>>>>>> ya pude arreglar esto, lo implemente para coach y activity, falta implementarlo en todo <<<<<<<<<<
+
+		modificar SUS solicitudes
+		eliminar SUS solicitudes
+		
+			todo lo de arriba lo voy a poder probar recien cuando tenga bien hecho la seguridad
+
+	el admin podra hacer el CRUD completo
+
+
+
+
+
+
+- JwtService -> expirationTime
+- token, que lo borre en vez de marcarlo como log out
+
+- SecurityConfiguration , hay que arreglarlo			>> A MEDIAS <<
+	quedo comentado el permitAll() hay que chequearlo
+
+- authenticationService al final de todo, y en el registro, comentarios
+
+- authservice, prohibir el registro de usuarios que tengan el mismo email
+
+- hacer todos los controladores junto con la seguridad
+
+- un usuario tiene que pder solicitar converterse en un service-provider
+
+
+
+
+
+
+- tengo que pensar como va a ser el tema de insertar appointments
+	 ya que voy a crear Appointments que no pueden expirar pronto
+
+
+
+- ARREGLAR LOS TESTS ACTUALES
+	probablemente tengo que re-hacer todo de 0 usando los datos que estan en el script
+	revisar cada test y cada uno de los servicios y posibilidades para testear todos los casos y excepciones
+
+- ajustar todos los tests con datos pre-cargados que simulen realidad
+- revisar todos los tests unitarios que todo revise todo
+
+
+- al crear disciplina el usuario tiene que tener el rol que permita crear actividades 
+	(esto creo que va a quedar cuando agregue la capa de seguridad)
+
+
+- todo el tema del token y logout
+- manipular el 403 de acceso denegado
+- permisos spring https://youtu.be/_NgzlZknoys?si=SgFDTIlur9qdKrwo
+
+
+
+- seteo de roles 
+- analisar toda la parte de seguridad, tengo bastante trabajo aca
+
+- agregar JavaDoc: configureMapper, Tests, servicios
+- agregar comentarios a todo el codigo, revisar clase x clase
+- el configureMapper hay que llenarlo de comments para que se entienda
+
+
+- los servicios que trabajan con entidades que tienen relacion con otras entidades, 
+	al momento de verificar que la otra entidad existe y tal, 
+	podria ir a buscarla y cargarla con el objetivo de pasarle todos los datos y no solo el id.
+
+
+- testear la eliminacion de cada una de las entidades y verificar si da problemas con sus relaciones
+
+
+- agregar swagger, documentacion de api, hay data de esto en el pg
+
+
+- refresh token https://www.youtube.com/watch?v=EsVybSJr7zU&ab_channel=BoualiAli
+
+codigo comentado que tengo que mirar
+- entidad Activity en el atributo User y lo mismo pero en Reservation
+- ActivityDTO
+
+- tengo que pensar como va a ser el registro de appointments, 
+	ya que tiene que ser un registro grupal donde se ingresan muchos appointments de una
+	el usuario deberia poder elegir un patron de turnos y setearlo por semana o incluso por mes
+		>>> esto puede ser mas para front end <<<
+
+
+- ajustar arreglar y perfeccionar todos los http en el postman, contemplando los que deben disparar excepciones y los que no
+
+
+
+
+- websocket
+- dockerizar
+
+- el mapper tendria que tener excepciones porque se rompe por completo si algun dato no se manda
+
+
+- cuando todo este terminado, volver a diagramar todo bien separado por modulos (https://youtu.be/YSEICIDyBP8)
+		ese mismo video, me da la sensacion de que podria perfectamente separar todo en micro servicios
+		o capaz los microservicios lo dejo para otro proyecto
+
+
+
+
+
+
+
+
+
+
+DONE:
+
+
+
+
+- activity tiene que exponer fechas disponibles para reservar y de ahi el cliente tiene que servirse, 
+osea reservation tiene que crearse a partir de una posibilidad que ya existe y no fue usada, cuando el usuario la usa, esa oportunidad pasa a estar agotada.
+	esta hora que ofrece la actividad tiene que tener 3 estados, disponible, ocupada y expirada
+	cuando un usuario agarra esa actividad que estaba disponible, pasa a ocupada y nadie mas la puede usar
+	
+	- actualizar DTOs de Reservation y Activity (LISTO) y el ConfigMapper (LISTO)
+		- hay que mapearle Appointment a Reservation, y a Appointment hay que 
+			agregarle los maps que ya tenia Reservation y ver si alguno mas
+
+	(LISTO HASTA ACA)
+
+	---------->   cambio de estado   <------------
+
+		cuando la fecha de un Appointment ya paso, su estado tiene que cambiar de Available/Unavailable a Expired
+		quedo hecho con el SchedulerConfig que ejecuta una accion en el AppointmentService que ejecuta una query en el repositorio
+		y en base al resultado ejecuta otra query de actualizacion
+			>>>>> LISTO <<<<<<
+		
+		hacer un metodo en appointment que traiga solamente los turnos no expirados 
+			(>>>LISTO<<<)
+
+		cuando un usuario reserva un appointment este tiene que cambiar de Available a Unavailable
+			tiene que estar available si o si, y NO PUEDE estar expirado
+				probar pasarle un appointment que no existe al crear una reserva
+				agregar nueva excepcion linea 77 appointmentService
+					y nueva excepcion en linea 48 ReservationService
+			quedo con excepcion si tiene estado no disponible o expirado, probar eso
+						>>> LISTO TODO <<<<
+
+		cuando un usuario cancela una reserva que no esta expirada tiene que cambiar de Unavailable a Available
+				>>>> LISTO <<<<<
+
+
+	no puede haber 2 reservas para el mismo appointment (esto creo que ya lo hace automatico)
+		(>>>	esto ya quedo resuelto que un appointment solo se puede reservar si esta available <<<)
+	
+	y tiene que estar available para poder hacerse la reserva (>>LISTO<<)
+
+	la reserva tiene que tener la posibilidad de ser cancelada, solo se puede hacer antes de que el appointment expire, vuelve a estar available
+	tambien tiene que tener la posibilidad de asignarle otro appointment siempre y cuando este este disponible
+		(>>> lo primero esta listo, lo otro no lo voy a implementar. el usuario tendria que cancelar y hacer una nueva reserva <<<)
+
+
+
+
+- hacer el front en react, usar TS
+
+- excepcion en CRUDMapper (readById) // LISTO
+
+- script de datos, primero va  -->>> LISTO
+	Role >  LISTO
+	Usuarios > LISTO
+	UserRole > LISTO
+	Disciplinas > LISTO
+	Address > LISTO
+	Actividades > LISTO
+	AppointmentStates > LISTO 
+	Appointments > LISTO
+	Reservas > LISTO
+
+
+((((    - agregar el filtro por cantidad de personas
+		 y toda la logica del max_people      )))))
+
+
+VOY A MOVER EL max_people de ACTIVIDAD A TURNO >>> LISTO <<<
+
+	al momento de ingresar una reserva, 
+		se tiene que fijar la cantidad de reservas que existen actualmente asociadas a ese turno
+		si tiene max-people 1, al momento que alguien hace una reserva, el turno pasa a no estar disponible.
+		si esa actividad a la que esta asociada el turno al que estamos reservando, tiene > 1 en max_people
+			hay que hace un conteo de reservas asociadas a ese turno, si la cantidad de reservas es menor 
+			al numero en max_people de esa actividad, la reserva va a hacerse efectiva.
+			si el numero de conteo de reservas asociadas a ese turno es solamente una unidad inferior al numero de max_people
+				el turno tiene que quedar DESHABILITADO ya que entro la ultima reserva disponible segun el maximo de personas
+				para esa actividad.
+			si el numero de conteo de reservas asociadas a ese turno es mas de una unidad inferior al numero de max_people
+				la reserva se va hacer efectiva y VA A CONTINUAR HABILITADA para recibir mas reservas.
+		>> LISTO <<
+		
+		resolverlo con exceptions >> LISTO <<
+		
+
+		Test: probar con un AppointmentId que no exista, >> LISTO <<
+		      con uno que tenga lleno el max-people >> LISTO <<
+		      con uno que le falte 1 para llenar >> LISTO <<
+		      con uno que le falte varios para llenar >> LISTO <<
+			probar llegar a que quede full, despues cancelar una reserva y volver a intentar >> LISTO <<
+			
+
+		((esta misma validacion hay que agregarla cuando un usuario cancela una reserva)) >> LISTO <<
+			>>> DOING THIS <<<
+
+
+- agregar excepcion para que no se pueda crear una disciplina que ya exista >>> LISTO <<<
+y otra para que no se pueda actualizar si el tipo no es de los tipos que existen y lo mismo al crear >>> LISTO <<<
+
+- agregar excepcion para que al crear una actividad tiene que tener una disciplina que ya existe, >>> LISTO <<<
+
+- al crear appointment tiene que existir la actividad >>> LISTO <<<
+	y el tipo de state tiene que ser valido >>> LISTO <<<
+
+
+- al crear la reserva tiene que existir el appointment >>> Esto esta listo, tira el 404 en el checkIfIsFullToCreateReservation <<<
+
+- configureMapper , roles en map activity to activityDTO >>> LISTO <<<

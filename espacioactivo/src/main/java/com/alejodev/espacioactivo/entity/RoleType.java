@@ -15,8 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 public enum RoleType implements GrantedAuthority {
     ROLE_ADMIN,
-    ROLE_SPACE_RENTER,
-    ROLE_COACH,
+    ROLE_SERVICE_PROVIDER,
     ROLE_CUSTOMER;
 
     @Override

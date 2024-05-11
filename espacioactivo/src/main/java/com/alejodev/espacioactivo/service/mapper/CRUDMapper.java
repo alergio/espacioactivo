@@ -163,7 +163,7 @@ public class CRUDMapper <T, E> implements ICRUDService {
 
             case ACTIVITIES_BY_USERNAME -> {
                 IActivityRepository activityRepository = (IActivityRepository) repository;
-                entityList = (List<E>) activityRepository.findAllActivitiesByUser((String) data);
+                entityList = (List<E>) activityRepository.findAllActivitiesByUserId((Long) data);
             }
         }
 

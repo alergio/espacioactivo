@@ -106,14 +106,14 @@ public class AuthenticationService {
 
     }
 
-    public static String getUserName() {
+    public static Long getAuthenticatedUserId() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Verificar si el usuario está autenticado
         if (authentication != null && authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return userDetails.getUsername();
+            User user = (User) authentication.getPrincipal();
+            return user.getId();
         } else {
             throw new AuthenticationCredentialsNotFoundException("");
         }
