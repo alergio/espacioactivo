@@ -40,6 +40,9 @@ public class Reservation {
     @Column(name = "is_cancelled")
     private boolean cancelled;
 
+    @Enumerated(EnumType.STRING)
+    private InformalRoleType cancelledBy;
+
 
     // Implementación de equals() y hashCode()
     @Override

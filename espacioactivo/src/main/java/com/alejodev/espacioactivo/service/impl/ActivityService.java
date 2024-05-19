@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg.emptyFieldMessage;
 import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getAuthenticatedUserId;
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getActivityCRUDMapper;
 
@@ -45,7 +46,7 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         ActivityDTO activityDTORequest = (ActivityDTO) activityDTO;
 
         if (activityDTORequest.getDisciplineDTO() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty disciplineDTO field.");
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("disciplineDTO"));
         }
 
         Optional<Discipline> discipline =
@@ -80,11 +81,11 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
     }
 
     public ResponseDTO readAllByServiceProvider(){
-        // este sale trae las que el creo
+        // este solo trae las que el creo
 
         // esto ya valida que el usuario este logueado
         Long userId = getAuthenticatedUserId();
-        return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERNAME, userId);
+        return crudMapper.readAllWithCondition(ReadAllCondition.ACTIVITIES_BY_USERID, userId);
     }
 
     public ResponseDTO createByServiceProvider(ActivityDTO activityDTO) {
@@ -98,41 +99,42 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
 
         // aca estoy condicionando para que solo pueda modificar los que son de el
 
+        if (activityDTORequest.getId() == null) {
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("activityDTO.id"));
+        }
+
         AddressDTO addressDTO = activityDTORequest.getAddressDTO();
 
         if (addressDTO == null && activityDTORequest.getPrice() == null) {
-
-            throw new DataIntegrityVExceptionWithMsg("Address and price cannot both be empty.");
-
-        } else {
-
-            Long activityId = activityDTORequest.getId();
-            ActivityDTO activityDTOForUpdate = getActivityDTOForUpdateOrDelete(activityId);
-
-            if(addressDTO != null){
-                activityDTOForUpdate.setAddressDTO(addressDTO);
-            }
-
-            if(activityDTORequest.getPrice() != null) {
-                activityDTOForUpdate.setPrice(activityDTORequest.getPrice());
-            }
-
-            return update(activityDTOForUpdate);
-
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("Address and price"));
         }
+
+        Long activityId = activityDTORequest.getId();
+        ActivityDTO activityDTOForUpdate = getUserActivityDTOById(activityId);
+
+        if(addressDTO != null){
+            activityDTOForUpdate.setAddressDTO(addressDTO);
+        }
+
+        if(activityDTORequest.getPrice() != null) {
+            activityDTOForUpdate.setPrice(activityDTORequest.getPrice());
+        }
+
+        return update(activityDTOForUpdate);
+
     }
 
 
     public ResponseDTO deleteByServiceProvider(Long activityId) {
 
-        ActivityDTO activityDTOForDelete = getActivityDTOForUpdateOrDelete(activityId);
-        return delete(activityDTOForDelete.getId());
+        getUserActivityDTOById(activityId);
+        return delete(activityId);
 
     }
 
 
 
-    private ActivityDTO getActivityDTOForUpdateOrDelete(Long activityId) {
+    public ActivityDTO getUserActivityDTOById(Long activityId) {
         ActivityDTO activityDTO = null;
 
         ResponseDTO responseForAllActivities = readAllByServiceProvider();
@@ -144,6 +146,7 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
                 break;
             }
         }
+
         if (activityDTO != null) {
             return activityDTO;
         } else {
@@ -157,7 +160,7 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         Long userId = getAuthenticatedUserId();
 
         if (activityDTO.getUserDTO() == null || activityDTO.getUserDTO().getId() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty userDTO or userDTO.id field.");
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("userDTO or userDTO.id"));
         }
 
         if (!activityDTO.getUserDTO().getId().equals(userId)) {
@@ -165,15 +168,15 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
         }
 
         if (activityDTO.getAddressDTO() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO field.");
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("addressDTO"));
         }
 
         if (activityDTO.getAddressDTO().getState() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty addressDTO.state field.");
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("addressDTO.state"));
         }
 
         if (activityDTO.getPrice() == null) {
-            throw new DataIntegrityVExceptionWithMsg("You can't send empty price field.");
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("price"));
         }
     }
 

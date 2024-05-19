@@ -33,6 +33,7 @@ public class Appointment {
     @Column(name = "is_Full")
     private boolean isFull;
     private Integer maxPeople;
+    private Integer totalReserves;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state_id", nullable = false)

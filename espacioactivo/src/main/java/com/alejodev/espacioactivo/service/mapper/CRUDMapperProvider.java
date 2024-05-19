@@ -80,6 +80,23 @@ public class CRUDMapperProvider {
 
     }
 
+    public static CRUDMapper<AppointmentStateDTO, AppointmentState> getAppointmentStateCRUDMapper(IAppointmentStateRepository appointmentStateRepository) {
+
+        CRUDMapper<AppointmentStateDTO, AppointmentState> appointmentStateCRUDMapper = new CRUDMapper<>();
+
+        Class<AppointmentState> appointmentStateClass = AppointmentState.class;
+        String appointmentStateClassName = appointmentStateClass.getSimpleName();
+
+        appointmentStateCRUDMapper.setRepository(appointmentStateRepository);
+        appointmentStateCRUDMapper.setDtoClass(AppointmentStateDTO.class);
+        appointmentStateCRUDMapper.setEntityClass(appointmentStateClass);
+        appointmentStateCRUDMapper.setEntityClassName(appointmentStateClassName);
+        appointmentStateCRUDMapper.setEntityClassNamePlural(appointmentStateClassName + "s");
+
+        return appointmentStateCRUDMapper;
+
+    }
+
 
     public static CRUDMapper<RequestToCreateDisciplineDTO, RequestToCreateDiscipline> getRequestToCreateDisciplineCrudMapper
             (IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository) {

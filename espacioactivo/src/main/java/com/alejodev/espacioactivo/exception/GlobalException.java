@@ -182,5 +182,19 @@ public class GlobalException {
 
     }
 
+    @ExceptionHandler(MethodNotAllowedException.class)
+    public ResponseEntity<Object> MethodNotAllowed(MethodNotAllowedException ex){
+
+        ResponseDTO response = new ResponseDTO();
+
+        response.setStatusCode(HttpStatus.METHOD_NOT_ALLOWED.value());
+        response.setMessage("The request method is known by the server but is not supported by the target resource. Msg: " + ex.getMessage());
+
+        LOGGER.error("ERROR 405: METHOD NOT ALLOWED (" + ex.getClass().getSimpleName() + ") ocurred on the server. Trace:", ex);
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
+
+    }
+
 
 }

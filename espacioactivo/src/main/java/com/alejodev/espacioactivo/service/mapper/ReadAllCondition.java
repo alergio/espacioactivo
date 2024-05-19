@@ -4,5 +4,7 @@ package com.alejodev.espacioactivo.service.mapper;
 public enum ReadAllCondition {
     APPOINTMENTS_UNEXPIRED,
     DISCIPLINE_REQUESTS_BY_USERNAME,
-    ACTIVITIES_BY_USERNAME;
+    ACTIVITIES_BY_USERID,
+    APPOINTMENTS_BY_USERID,
+    RESERVATIONS_BY_APPOINTMENTID;
 }

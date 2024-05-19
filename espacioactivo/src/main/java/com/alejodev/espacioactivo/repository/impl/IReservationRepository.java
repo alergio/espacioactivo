@@ -11,10 +11,10 @@ import java.util.List;
 public interface IReservationRepository extends IGenericRepository<Reservation, Long> {
 
     @Query("""
-        SELECT COUNT(r) FROM Reservation r
+        SELECT r FROM Reservation r
         WHERE r.appointment.id = :appointmentId AND r.cancelled = false
         """)
-    Long findAllReservationsByAppointment(Long appointmentId);
+    List<Reservation> findAllEnabledReservationsByAppointmentId(Long appointmentId);
 
 
 }

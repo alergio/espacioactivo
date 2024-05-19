@@ -1,6 +1,7 @@
 package com.alejodev.espacioactivo.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +23,14 @@ public class AppointmentDTO implements EntityIdentificatorDTO {
     private Long id;
     private String date;
     private String time;
+    @JsonProperty("isFull")
     private boolean isFull;
     private Integer maxPeople;
+    private Integer totalReserves;
     private ActivityDTO activityDTO;
     private AppointmentStateDTO appointmentStateDTO;
+
+    @JsonProperty("cancelAllReserves")
+    private boolean cancelAllReserves = false;
 
 }

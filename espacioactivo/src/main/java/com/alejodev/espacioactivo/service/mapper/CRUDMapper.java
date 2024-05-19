@@ -7,6 +7,7 @@ import com.alejodev.espacioactivo.repository.IGenericRepository;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.repository.impl.IRequestToCreateDisciplineRepository;
+import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import lombok.*;
 import org.apache.log4j.Logger;
@@ -14,10 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.alejodev.espacioactivo.service.mapper.ConfigureMapper.configureMapper;
 
@@ -114,9 +112,13 @@ public class CRUDMapper <T, E> implements ICRUDService {
                     .map(entity -> modelMapper.map(entity, dtoClass))
                     .toList();
 
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("count", entityDTOList.size());
+            data.put(entityClassNamePlural, entityDTOList);
+
             responseDTO.setStatusCode(HttpStatus.OK.value());
             responseDTO.setMessage("Request to see all " + entityClassNamePlural + " completed successfully.");
-            responseDTO.setData(Collections.singletonMap(entityClassNamePlural, entityDTOList));
+            responseDTO.setData(data);
 
             LOGGER.info("Request to see all " + entityClassNamePlural + " completed successfully.");
 
@@ -161,9 +163,19 @@ public class CRUDMapper <T, E> implements ICRUDService {
                 entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((String) data);
             }
 
-            case ACTIVITIES_BY_USERNAME -> {
+            case ACTIVITIES_BY_USERID -> {
                 IActivityRepository activityRepository = (IActivityRepository) repository;
                 entityList = (List<E>) activityRepository.findAllActivitiesByUserId((Long) data);
+            }
+
+            case APPOINTMENTS_BY_USERID -> {
+                IAppointmentRepository appointmentRepository = (IAppointmentRepository) repository;
+                entityList = (List<E>) appointmentRepository.findAllAppointmentsByUserId((Long) data);
+            }
+
+            case RESERVATIONS_BY_APPOINTMENTID -> {
+                IReservationRepository reservationRepository = (IReservationRepository) repository;
+                entityList = (List<E>) reservationRepository.findAllEnabledReservationsByAppointmentId((Long) data);
             }
         }
 
