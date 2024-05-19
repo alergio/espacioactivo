@@ -172,7 +172,10 @@ VALUES
 	(33, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 3 DAY), '%Y-%m-%d'), '21:00:00', 5, 0, false, 6, 1),
 	(34, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 4 DAY), '%Y-%m-%d'), '21:00:00', 5, 1, false, 6, 1),
     (35, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 5 DAY), '%Y-%m-%d'), '21:00:00', 5, 0, false, 6, 1),
-    (36, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 5, 0, false, 6, 1)
+    (36, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 5, 0, false, 6, 1),
+    (37, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 5, 0, false, 4, 3),
+    (38, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 5, 0, false, 4, 2),
+    (39, DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 6 DAY), '%Y-%m-%d'), '21:00:00', 5, 1, false, 4, 1)
 
 	AS new_values(id, date, time, max_people, total_reserves, is_full, activity_id, state_id)
     ON DUPLICATE KEY UPDATE
@@ -187,21 +190,23 @@ VALUES
 
 
 -- reservas
-INSERT INTO reservation (id, is_cancelled, appointment_id, user_id)
+INSERT INTO reservation (id, is_cancelled, appointment_id, user_id, cancelled_by)
 VALUES
 
-	(1, 0, 3, 1),
-	(2, 0, 4, 2),
-	(3, 0, 13, 3),
-	(4, 0, 13, 4),
-    (5, 0, 34, 1),
-    (6, 0, 25, 2)
+	(1, 0, 3, 1, "NONE"),
+	(2, 0, 4, 2, "NONE"),
+	(3, 0, 13, 3, "NONE"),
+	(4, 0, 13, 4, "NONE"),
+    (5, 0, 34, 1, "NONE"),
+    (6, 0, 25, 2, "NONE"),
+    (7, 0, 39, 2, "NONE")
 
-	AS new_values(id, is_cancelled, appointment_id, user_id)
+	AS new_values(id, is_cancelled, appointment_id, user_id, cancelled_by)
  ON DUPLICATE KEY UPDATE
      is_cancelled = new_values.is_cancelled,
      appointment_id = new_values.appointment_id,
-     user_id = new_values.user_id
+     user_id = new_values.user_id,
+     cancelled_by = new_values.cancelled_by
      ;
 
 

@@ -28,7 +28,6 @@ back end EspacioActivo anotaciones
 TO-DO:
 
 
-
 		
 
 
@@ -63,6 +62,7 @@ TO-DO:
 
 		actualiza
 			> SUS actividades 	>>> LISTO <<<
+			{
 				(deberia solamente poder actualizar precio y address, testear esto)
 					se testeo que puede actualizar mandando solo el precio y el id y anda bien
 					tambien mandar un id a una actividad que no le pertenece
@@ -70,25 +70,84 @@ TO-DO:
 					se probo mandando solo address y ok
 					se probo sin precio ni address y exception ok
 					probar si tiene 0 actividades >> ok <<
+					>> solo deberia poder actualizar las actividades que le pertenecen << >> ok <<
 					
-			>> SUS appointments >> hacer esto <<
-				date puede ser actualizada siempre y cuando sea igual o posterior a maniana
-				is_full puede ser modificado, ignorando el max_people
-				max_people puede ser modificado siempre y cuando el solicitado sea mayor o igual a su total de reservas
-												si es igual al total de reservas, el is_full va a quedar en true
-												tiene que tener ademas las validaciones de > 0 y < 25
-				el time puede ser modificado siempre y cuando este dentro de la franja horaria habilitada
-				puede cambiar el activity id solo si el que envia es igual a alguno que quien lo envia tenga creado
-				el state_id puede cambiar a unavailable
-						si cambia a unavailable y hay reservas asociadas, todas tienen que cambiar a cancelado
-							se podria hacer un nuevo campo que declare quien es el que cancelo la reserva (proveedor o customer)
-						el totalReserves y el isFull del appointment no cambia
-							
-				el state_id puede cambiar a available desde unavailable
-					si la fecha es <= a maniana
-					las reservas que tenia quedan canceladas
-					el totalReserves se re-inicializa en 0 y el isFull queda en false
+					>> agregar todas estas pruebas al postman, quiza cuando haga los test <<
+			}			
+			
+			>> SUS appointments >> hacer esto << >> listo << --- >> probarlo << >>>> en teoria ya esta todo validado , 19/5 3PM <<<
+			
+			{
+				solo puede modificarlo si el appointment es de el >> listo <<		 >> validado <<
+				no puede modificar un appointment expirado >> listo <<				 >> validado <<
 				
+				>>>>>>>>>>>>>> >> AGREGAR TODOS ESTOS CASOS EN POSTMAN , HACERLO TB CON IS_FULL << <<<<<<<<<<<<<<
+				
+				el state_id puede cambiar a unavailable >> listo <<
+						excepcion si envia un estado invalido >> listo << >> validado <<
+						si cambia a unavailable y hay reservas asociadas, todas tienen que cambiar a cancelado >> listo <<  >> validado <<
+							hay que ir al service de reserva y traer todas las reservas con este appointmentId >> listo << 
+								todas las que no esten canceladas hay que cancelarlas >> listo <<
+									>> esto tiene que ir en una flag, no debe ser asi siempre << >> listo << >> validado <<
+										yo puedo querer deshabilitar un turno y mantener las reservas >> listo << >> validado <<
+							se podria hacer un nuevo campo >> listo << 
+								que declare quien es el que cancelo la reserva (proveedor o customer) >> listo << >> validado <<
+									hay que cambiar entidad, dto, mapperconfig , parece que no requiere mapperconfig >> listo <<  >> validado <<
+						el totalReserves y el isFull se reinicia cuando cancelan las reservas >> listo << >> validado <<
+						el sistema me va a permitir hacer una modificacion si estoy enviando el mismo estado que la entidad >> listo << >> validado <<
+							persistida ya tiene, solo si envio en true la flag de cancelar reservas y el turno tiene reservas activas >> listo << >> validado <<
+							esto es para poder cancelar reservas despues en un turno que ya esta deshabilitado pero con reservas activas >> listo << >> validado <<
+							tambien puedo no enviar informacion de estado y mandar la flag de cancelar reservas en true >> listo << >> validado <<
+								si hay reservas para cancelar, el sistema lo va aceptar >> listo << >> validado <<
+						si envio el campo 'cancelAllReserves' en true y no hay reservas para cancelar envia una excepcion. >> listo << >> validado <<
+							
+				el state_id puede cambiar a available desde unavailable >> listo << >> validado <<
+					si la fecha es >= a maniana  >> listo << >> validado <<
+					las reservas que tenia quedan canceladas >> listo << >> validado <<
+					el totalReserves se re-inicializa en 0 y el isFull queda en false >> listo << >> validado <<
+				
+				date puede ser actualizada siempre y cuando sea igual o posterior a maniana y diferente al actual >> listo << >> validado <<
+				
+
+				is_full puede ser modificado, si esta en false, ignorando el max_people >> listo << >> validado <<
+						si pasa de no estar lleno, a estar lleno, tambien tiene que cambiar de estado a UNAVAILABLE. >> listo << >> validado <<
+							si el request state es Unavailable lo deja asi, si esta null le setea UNAVAILABLE >> listo << >> validado <<
+							si es Available, lanza una excepcion >> listo << >> validado <<
+					
+				si intento modificar un turno que ya esta lleno  >> listo << >> validado <<
+				aca tendria que validar si realmente esta lleno. >> listo << >> validado <<
+						puede ser que el turno este lleno pero le quiero aumentar el maxPeople >> listo << >> validado <<
+						ahi tambien tendria que cambiar el estado, si esta unavailable, a Available >> listo << >> validado <<
+							si estoy mandando un estado null, o un estado Available.  >> listo << >> validado <<
+							Si estoy enviando un estado Unavailable, no tiene sentido sacarle el full >> listo << >> validado <<
+							si quiero setear un turno que estaba full a no full, tengo que, o enviar un max-people mayor al total de reservas >> listo << >> validado <<
+							o el turno ya tiene que tener un max-people default que sea mayor al total de reservas >> listo << >> validado <<
+						ahi podria cambiar tambien el isFull >> listo << >> validado <<
+									
+									
+					
+					
+						>> hay que validar esto <<
+				max_people puede ser modificado siempre y cuando el solicitado sea mayor o igual a su total de reservas >> listo << >> validado 19/5 3PM <<
+												si es igual al total de reservas, el is_full va a quedar en true >> listo << >> validado 19/5 3PM <<
+													si el isfull queda en true, va a cambiar de estado seguramente >> listo << >> validado 19/5 3PM <<
+													de available a unavailable >> listo << >> validado 19/5 3PM <<
+												tiene que tener ademas las validaciones de > 0 y < 25 >> listo << >> validado 19/5 3PM <<
+												si el turno estaba full y se quiere aumentar el max_people >> listo <<  >> validado 19/5 3PM <<
+													tiene que cambiar a no full >> listo <<   >> validado 19/5 3PM <<
+														si cambia a no full, probablemente tenga que cambiar su estado >> listo <<   >> validado 19/5 3PM <<
+															de unavailable a available >> listo <<   >> validado 19/5 3PM <<
+															
+													si el turno estaba full, y se envia un aumento del max people >> listo << >>>> probar esto <<<< >> validado 19/5 3PM <<
+													quedando de tal forma que max people > totalReserves  >> validado 19/5 3PM <<
+														 y envian full en true. lanzaria una excepcion porque no tiene sentido  >> listo << >> validado 19/5 3PM <<
+														 							
+				el time puede ser modificado siempre y cuando este dentro de la franja horaria habilitada >> listo <<
+				el total_reserves no puede ser modificado >> listo << >> validado <<
+				puede cambiar el activity id solo si el que envia es igual a alguno que quien lo envia tenga creado >> listo <<
+				
+				
+			}
 
 
 		elimina
@@ -96,6 +155,8 @@ TO-DO:
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
 			>> SUS appointments
+					>> hacer esto << 19/5 3pm
+			
 			
 			
 		que interaccion tiene con las reservas a sus appointments?
@@ -125,11 +186,14 @@ TO-DO:
 
 
 
+- el tema del total reserves , isFull y tal, se volvio una dependencia, habria que centralizarlo en un solo lugar
 
 
+- validacion por repositorio en el create de AppointmentService para Activity podria cambiar.
 
 - hay que actualizar el securityConfiguration lo que puede acceder un admin quedo en /**
 
+integrar pagos
 
 - Notificaciones:
 	sucesos que deberian disparar notificaciones:

@@ -25,5 +25,10 @@ public class AppointmentSPController {
         return ResponseEntity.ok(appointmentService.readAllByServiceProvider());
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<?> updateAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+        return ResponseEntity.ok(appointmentService.updateByServiceProvider(appointmentDTO));
+    }
+
 
 }

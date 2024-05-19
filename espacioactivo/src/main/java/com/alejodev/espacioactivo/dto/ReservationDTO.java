@@ -20,5 +20,6 @@ public class ReservationDTO implements EntityIdentificatorDTO {
     private UserDTO userDTO;
     private AppointmentDTO appointmentDTO;
     private boolean cancelled;
+    private String cancelledBy;
 
 }

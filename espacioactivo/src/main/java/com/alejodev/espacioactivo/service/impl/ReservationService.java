@@ -1,11 +1,13 @@
 package com.alejodev.espacioactivo.service.impl;
 
 import com.alejodev.espacioactivo.dto.*;
+import com.alejodev.espacioactivo.entity.InformalRoleType;
 import com.alejodev.espacioactivo.entity.Reservation;
 import com.alejodev.espacioactivo.exception.MethodNotAllowedException;
 import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
+import com.alejodev.espacioactivo.service.mapper.ReadAllCondition;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.apache.log4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getReservationCRUDMapper;
 
@@ -79,6 +82,7 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
         }
 
         reservationDTO.setCancelled(true);
+        reservationDTO.setCancelledBy(String.valueOf(InformalRoleType.CUSTOMER));
 
         crudMapper.update(reservationDTO);
         ReservationDTO reservationDTOUpdated =
@@ -93,4 +97,20 @@ public class ReservationService implements ICRUDService<ReservationDTO> {
         return response;
 
     }
+
+    public void cancelReservationsByDisabledAppointment(Long appointmentId) {
+
+        List<ReservationDTO> enabledReservationsFromAppointment =
+                (List<ReservationDTO>) crudMapper.readAllWithCondition(
+                        ReadAllCondition.RESERVATIONS_BY_APPOINTMENTID, appointmentId).getData().get("Reservations");
+
+        for (ReservationDTO reservation : enabledReservationsFromAppointment) {
+            reservation.setCancelled(true);
+            reservation.setCancelledBy(String.valueOf(InformalRoleType.SERVICE_PROVIDER));
+            crudMapper.update(reservation);
+        }
+
+    }
+
+
 }

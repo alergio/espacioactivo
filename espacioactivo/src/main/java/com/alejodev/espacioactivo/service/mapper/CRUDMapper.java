@@ -7,6 +7,7 @@ import com.alejodev.espacioactivo.repository.IGenericRepository;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
 import com.alejodev.espacioactivo.repository.impl.IAppointmentRepository;
 import com.alejodev.espacioactivo.repository.impl.IRequestToCreateDisciplineRepository;
+import com.alejodev.espacioactivo.repository.impl.IReservationRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import lombok.*;
 import org.apache.log4j.Logger;
@@ -170,6 +171,11 @@ public class CRUDMapper <T, E> implements ICRUDService {
             case APPOINTMENTS_BY_USERID -> {
                 IAppointmentRepository appointmentRepository = (IAppointmentRepository) repository;
                 entityList = (List<E>) appointmentRepository.findAllAppointmentsByUserId((Long) data);
+            }
+
+            case RESERVATIONS_BY_APPOINTMENTID -> {
+                IReservationRepository reservationRepository = (IReservationRepository) repository;
+                entityList = (List<E>) reservationRepository.findAllEnabledReservationsByAppointmentId((Long) data);
             }
         }
 
