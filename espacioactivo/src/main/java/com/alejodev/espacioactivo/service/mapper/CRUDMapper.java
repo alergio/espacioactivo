@@ -1,6 +1,5 @@
 package com.alejodev.espacioactivo.service.mapper;
 
-import com.alejodev.espacioactivo.dto.ActivityDTO;
 import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
 import com.alejodev.espacioactivo.exception.MethodNotAllowedException;
@@ -159,7 +158,7 @@ public class CRUDMapper <T, E> implements ICRUDService {
                 entityList = (List<E>) appointmentRepository.findUnexpiredAppointments();
             }
 
-            case DISCIPLINE_REQUESTS_BY_USERNAME -> {
+            case DISCIPLINE_REQUESTS_BY_USERID -> {
                 IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository =
                         (IRequestToCreateDisciplineRepository) repository;
                 entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((Long) data);
