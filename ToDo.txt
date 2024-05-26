@@ -183,15 +183,17 @@ TO-DO:
 			}
 
 
-				>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ESTOY ACA <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 22/5 20:16
-			>> SUS solicitudes >> To Do <<
-									>> TO DO <<	
+			>> SUS solicitudes >> listo << >> validado << (faltaria agregar algunos datos para validar excepciones)
+			{
 				modificar SUS solicitudes
-					solo si estan en estado ON_HOLD
-					solo si son de el
+					solo si son de el >>> listo <<< >> Validado <<
+					solo si estan en estado ON_HOLD >>> listo <<< >> Validado <<
 
-					podra modificar solo el nombre y el tipo de la disciplina solicitada
-						y se haran las mismas validaciones que se hicieron al intentar registrarla
+					podra modificar solo el nombre y el tipo de la disciplina solicitada >> listo << >> Validado <<
+						y se haran las mismas validaciones que se hicieron al intentar registrarla >> listo << >> Validado <<
+							no se puede crear una request con mismo nombre y tipo a una que ya existe >> LISTO << >> Validado <<
+							no se puede crear una request con una disciplina que no sea valida >>> LISTO <<< >> Validado <<
+			}
 						
 						
 
