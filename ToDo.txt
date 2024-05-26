@@ -204,12 +204,10 @@ TO-DO:
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
 			>> SUS appointments
-					>> hacer esto << 19/5 3pm
-					
 						un service-provider no puede eliminar appointments, puede setearlos como unavailable y cancelar las reservas.
 					
 			>> SUS Solicitudes
-										>> TO DO <<
+										>> TO DO << >>>>>>> estoy aca <<<<<<<<< 26/5 8:82 pm
 				eliminar SUS solicitudes
 					solo si estan en estado ON_HOLD
 
@@ -217,7 +215,7 @@ TO-DO:
 			
 			
 			
-		tambien puede cancelar reservas individualmente
+		>>>>>>>>>>>>>>>>>>>>>>>>> tambien puede cancelar reservas individualmente <<<<<<<<<<<<<<<<<<<<<<<<<<<
 			
 		que interaccion tiene con las reservas a sus appointments?
 			puede cancelarlas, y una vez que la cancela no lo puede revertir
