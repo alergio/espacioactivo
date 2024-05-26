@@ -188,13 +188,12 @@ TO-DO:
 									>> TO DO <<	
 				modificar SUS solicitudes
 					solo si estan en estado ON_HOLD
+					solo si son de el
 
 					podra modificar solo el nombre y el tipo de la disciplina solicitada
 						y se haran las mismas validaciones que se hicieron al intentar registrarla
 						
 						
-
->>>>>>>>>>>>>>>>>> request discipline se puede unificar en el servicio de disciplina <<<<<<<<<<<<<<<<<<<
 
 
 
@@ -256,6 +255,7 @@ el video puede ser atraves de una presentación
 
 - el tema del total reserves , isFull y tal, se volvio una dependencia, habria que centralizarlo en un solo lugar
 
+- request discipline se puede unificar en el servicio de disciplina  >> esto pense en hacerlo pero decidi que mejor no para tener mas separado el codigo
 
 - validacion por repositorio en el create de AppointmentService para Activity podria cambiar.
 

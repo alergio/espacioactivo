@@ -1,13 +1,12 @@
 package com.alejodev.espacioactivo.service.impl;
 
-import com.alejodev.espacioactivo.dto.DisciplineDTO;
-import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
-import com.alejodev.espacioactivo.dto.RequestToCreateDisciplineDTO;
-import com.alejodev.espacioactivo.dto.ResponseDTO;
+import com.alejodev.espacioactivo.dto.*;
 import com.alejodev.espacioactivo.entity.DisciplineType;
 import com.alejodev.espacioactivo.entity.RequestStatus;
 import com.alejodev.espacioactivo.entity.RequestToCreateDiscipline;
+import com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg;
 import com.alejodev.espacioactivo.exception.ResourceAlreadyExistsException;
+import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.impl.IRequestToCreateDisciplineRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
 import com.alejodev.espacioactivo.service.mapper.CRUDMapper;
@@ -16,8 +15,10 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
+import static com.alejodev.espacioactivo.exception.DataIntegrityVExceptionWithMsg.emptyFieldMessage;
 import static com.alejodev.espacioactivo.security.auth.AuthenticationService.getAuthenticatedUserId;
 import static com.alejodev.espacioactivo.service.mapper.CRUDMapperProvider.getRequestToCreateDisciplineCrudMapper;
 
@@ -91,6 +92,13 @@ public class RequestToCreateDisciplineService implements ICRUDService<RequestToC
 
     public ResponseDTO updateByServiceProvider(RequestToCreateDisciplineDTO requestToCreateDisciplineDTO) {
 
+        // valido que no venga el id vacio
+        if (requestToCreateDisciplineDTO.getId() == null) {
+            throw new DataIntegrityVExceptionWithMsg(emptyFieldMessage("requestToCreateDisciplineDTO.id"));
+        }
+
+        Long requestId = requestToCreateDisciplineDTO.getId();
+
         return null;
 
     }
@@ -118,5 +126,27 @@ public class RequestToCreateDisciplineService implements ICRUDService<RequestToC
             throw new ResourceAlreadyExistsException("Request To Create Discipline");
         }
     }
+
+//    private RequestToCreateDisciplineDTO getUserRequestById(Long requestId) {
+//
+//        RequestToCreateDisciplineDTO requestToCreateDisciplineDTO = null;
+//
+//        ResponseDTO responseForAllRequests = readAllByServiceProvider();
+//        List<RequestToCreateDisciplineDTO> activitiesDTO = (List<ActivityDTO>) responseForAllActivities.getData().get("Activities");
+//
+//        for(ActivityDTO activity : activitiesDTO) {
+//            if(activity.getId().equals(activityId)){
+//                activityDTO = activity;
+//                break;
+//            }
+//        }
+//
+//        if (activityDTO != null) {
+//            return activityDTO;
+//        } else {
+//            throw new ResourceNotFoundException("Activity");
+//        }
+//
+//    }
 
 }

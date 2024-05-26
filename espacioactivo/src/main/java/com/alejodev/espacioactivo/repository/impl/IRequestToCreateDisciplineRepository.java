@@ -21,4 +21,5 @@ public interface IRequestToCreateDisciplineRepository extends IGenericRepository
             "WHERE r.disciplineName = :disciplineName " +
             "AND r.disciplineType = :disciplineType")
     Optional<RequestToCreateDiscipline> findRequestByNameAndType(String disciplineName, DisciplineType disciplineType);
+
 }
