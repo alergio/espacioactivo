@@ -49,15 +49,48 @@ TO-DO:
 								
 						
 	   	     
-			 > solicitud de disciplinas
+			 > solicitud de disciplinas >> Listo y validado EXCEPTO la parte en la que es atendida por un admin <<
+
+				{
+
+
+					- el proveedor de servicios tiene que poder solicitar crear una nueva disciplina >> listo y validado 19/05 <<
+						tiene que tener el rol de service-provider >> listo y validado 19/05 <<
+					
+					primer warning: si tiene mismo nombre y mismo tipo no debe dejar >> LISTO << >> listo y validado 19/05 <<
+					
+					ya esta diagramado, el usuario va a CREAR una solicitud para crear una nueva disciplina >> LISTO <<  >> listo y validado 19/05 <<
+						esta solicitud va a tener dentro una disciplina, sin relacion con las disciplinas existentes ya que seria una nueva. >> LISTO << >> listo y validado 19/05 <<
+							el usuario que la envia  (1 usuario puede enviar n solicitudes) >> LISTO << >> listo y validado 19/05 <<
+							y un estado (en espera, aprobado, rechazado) >> LISTO << >>>> el estado se setea default al crear la solicitud en ON_HOLD <<<< >> listo y validado 19/05 <<
+
+						la solicitud tiene que tener una disciplina valida, esto se tiene que validar >> LISTO << >> listo y validado 19/05 <<
+
+						implementar que si ya hay una solicitud con el mismo nombre y el mismo tipo, lanzar una excepcion especifica >> listo y validado 19/05 <<
+
+
+							>>>>>>>> todo lo de aca abajo esta ToDo <<<<<<<<< <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+						esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
+						en caso de ser aprobada, se dara de alta una nueva disciplina
+						en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
+							en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
+								aca capaz sea necesario integrar websocket
+
+					el usuario puede:
+						crear una solicitud  >> LISTO << >> listo y validado 19/05 <<
+
+				}
+
 
 
 		lee
 		    > SUS actividades >>> LISTO <<<
 			
-		    > SUS appointments >> hacer esto <<
+		    > SUS appointments >> LISTO <<
 			
-		    > SUS solicitudes
+		    > SUS solicitudes 
+				leer SUS solicitudes >> listo y validado 19/05 <<
+							solo puede leer SUS solicirudes
 
 
 		actualiza
@@ -75,13 +108,13 @@ TO-DO:
 					>> agregar todas estas pruebas al postman, quiza cuando haga los test <<
 			}			
 			
-			>> SUS appointments >> hacer esto << >> listo << --- >> probarlo << >>>> en teoria ya esta todo validado , 19/5 3PM <<<
+			>> SUS appointments >>>> en teoria ya esta todo hecho y validado , 19/5 3PM <<<
 			
 			{
 				solo puede modificarlo si el appointment es de el >> listo <<		 >> validado <<
 				no puede modificar un appointment expirado >> listo <<				 >> validado <<
 				
-				>>>>>>>>>>>>>> >> AGREGAR TODOS ESTOS CASOS EN POSTMAN , HACERLO TB CON IS_FULL << <<<<<<<<<<<<<<
+				>>>>>>>>>>>>>> >> AGREGAR TODOS ESTOS CASOS EN POSTMAN , HACERLO TB CON IS_FULL << <<<<<<<<<<<<<< >> listo en teoria <<
 				
 				el state_id puede cambiar a unavailable >> listo <<
 						excepcion si envia un estado invalido >> listo << >> validado <<
@@ -127,7 +160,7 @@ TO-DO:
 									
 					
 					
-						>> hay que validar esto <<
+						>> validado 19/05 3 pm <<
 				max_people puede ser modificado siempre y cuando el solicitado sea mayor o igual a su total de reservas >> listo << >> validado 19/5 3PM <<
 												si es igual al total de reservas, el is_full va a quedar en true >> listo << >> validado 19/5 3PM <<
 													si el isfull queda en true, va a cambiar de estado seguramente >> listo << >> validado 19/5 3PM <<
@@ -150,14 +183,39 @@ TO-DO:
 			}
 
 
+				>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ESTOY ACA <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 22/5 20:16
+			>> SUS solicitudes >> To Do <<
+									>> TO DO <<	
+				modificar SUS solicitudes
+					solo si estan en estado ON_HOLD
+					solo si son de el
+
+					podra modificar solo el nombre y el tipo de la disciplina solicitada
+						y se haran las mismas validaciones que se hicieron al intentar registrarla
+						
+						
+
+
+
 		elimina
 			> SUS actividades >> LISTO <<
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
 			>> SUS appointments
 					>> hacer esto << 19/5 3pm
+					
+						un service-provider no puede eliminar appointments, puede setearlos como unavailable y cancelar las reservas.
+					
+			>> SUS Solicitudes
+										>> TO DO <<
+				eliminar SUS solicitudes
+					solo si estan en estado ON_HOLD
+
 			
 			
+			
+			
+		tambien puede cancelar reservas individualmente
 			
 		que interaccion tiene con las reservas a sus appointments?
 			puede cancelarlas, y una vez que la cancela no lo puede revertir
@@ -166,6 +224,7 @@ TO-DO:
 	Customer:
 
 		crea
+			> solicitud para ser un service provider
 
 		lee
 
@@ -181,13 +240,22 @@ TO-DO:
 		lee
 
 		actualiza
+			>> atiende solicitudes para crear nuevas disciplinas, las aprueba o las rechaza <<
+				si las aprueba tiene que dar de alta una nueva disciplina y cambiar el estado de la solicitud
+				si la rechaza cambia el estado de la solicitud
+					ambas cosas podrian disparar una notificacion al usuario que hizo la solicitud
 
 		elimina
 
 
+no olvidar q un usuario puede pedir convertirse e. service provider
+
+el video puede ser atraves de una presentación
+
 
 - el tema del total reserves , isFull y tal, se volvio una dependencia, habria que centralizarlo en un solo lugar
 
+- request discipline se puede unificar en el servicio de disciplina  >> esto pense en hacerlo pero decidi que mejor no para tener mas separado el codigo
 
 - validacion por repositorio en el create de AppointmentService para Activity podria cambiar.
 
@@ -196,6 +264,14 @@ TO-DO:
 integrar pagos
 
 - Notificaciones:
+
+	https://youtu.be/QNMItUBPxaI
+	https://youtu.be/RtFEFElstL4
+	https://youtu.be/mqDtfS2quto
+	https://youtu.be/wyMAggMz2PE
+	https://youtu.be/fZQOy5SucXw
+
+
 	sucesos que deberian disparar notificaciones:
 		
 		- hacer una reserva > al usuario y al proveedor
@@ -204,52 +280,9 @@ integrar pagos
 		- si un appointment llega a estar full > al provedor
 		- si el appointment cambia a expirado > al provedor
 		
-
-
-- el proveedor de servicios tiene que poder solicitar crear una nueva disciplina
-	tiene que tener el rol de coach o space renter. un customer comun no puede hacerlo
-
-	>> DOING THIS <<
-	
-	primer warning: si tiene mismo nombre y mismo tipo no debe dejar >> LISTO <<
-		(esto creo que ya esta atajado pero en el CREATE, atajar en la solicitud tambien) >> LISTO <<
-	
-	ya esta diagramado, el usuario va a CREAR una solicitud para crear una nueva disciplina >> LISTO <<
-		esta solicitud va a tener dentro una disciplina, sin relacion con las disciplinas existentes ya que seria una nueva. >> LISTO <<
-			el usuario que la envia  (1 usuario puede enviar n solicitudes) >> LISTO <<
-			y un estado (en espera, aprobado, rechazado) >> LISTO <<
-
-		la solicitud tiene que tener una disciplina valida, esto se tiene que validar >> LISTO <<
-
-		esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
-		en caso de ser aprobada, se dara de alta una nueva disciplina
-		en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
-			en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
-				aca capaz sea necesario integrar websocket
-
-	el usuario puede:
-		crear una solicitud  >> LISTO <<
-
-		leer SUS solicitudes >> A MEDIAS <<
-			ATENCION: aca lo que hice fue leer todos las solicitudes del id de un usuario
-				pero no hice ninguna limitacion para que sean las del usuario que lo solicita
-				eso lo voy a tener que estudiar cuando implemente la seguridad
-			
-			REVISAR ESTO AHORA !!! PORQUE ES ALGO QUE QUIERO APLICAR PARA OTRAS ENTIDADES
-			UN USUARIO SOLO PUEDE ACCEDER A LOS DATOS QUE LE CORRESPONDEN A ESE USUARIO Y NO A OTROS USUARIOS
-			PROBABLEMENTE VA A SER NECESARIO HACER USO DEL TOKEN
-				
-			>>>>>>>> ya pude arreglar esto, lo implemente para coach y activity, falta implementarlo en todo <<<<<<<<<<
-
-		modificar SUS solicitudes
-		eliminar SUS solicitudes
-		
-			todo lo de arriba lo voy a poder probar recien cuando tenga bien hecho la seguridad
-
-	el admin podra hacer el CRUD completo
-
-
-
+- websocket
+	chat entre cliente y service-provider
+	tmb se podria usar para las notifs
 
 
 
@@ -301,6 +334,14 @@ integrar pagos
 - agregar JavaDoc: configureMapper, Tests, servicios
 - agregar comentarios a todo el codigo, revisar clase x clase
 - el configureMapper hay que llenarlo de comments para que se entienda
+- documentar TODO el codigo
+
+
+
+
+
+- tests unitarios de todos los servicios
+- tests de integracion de todo
 
 
 - los servicios que trabajan con entidades que tienen relacion con otras entidades, 
@@ -331,7 +372,7 @@ codigo comentado que tengo que mirar
 
 
 
-- websocket
+
 - dockerizar
 
 - el mapper tendria que tener excepciones porque se rompe por completo si algun dato no se manda
@@ -340,6 +381,19 @@ codigo comentado que tengo que mirar
 - cuando todo este terminado, volver a diagramar todo bien separado por modulos (https://youtu.be/YSEICIDyBP8)
 		ese mismo video, me da la sensacion de que podria perfectamente separar todo en micro servicios
 		o capaz los microservicios lo dejo para otro proyecto
+
+- diagramar todo, separar por funcionalidades y demas
+
+
+
+
+
+
+
+
+
+
+
 
 
 

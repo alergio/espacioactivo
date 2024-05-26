@@ -112,7 +112,7 @@ public class GlobalException {
 
     }
 
-    private ResponseEntity<Object> appointmentNotAvailable(Exception ex, String entity) {
+    private ResponseEntity<Object> resourceNotAvailable(Exception ex, String entity) {
 
         ResponseDTO response = new ResponseDTO();
 
@@ -127,17 +127,17 @@ public class GlobalException {
 
     @ExceptionHandler(AppointmentStateException.class)
     public ResponseEntity<Object> appointmentStateEx(AppointmentStateException ex) {
-        return appointmentNotAvailable(ex, "Appointment");
+        return resourceNotAvailable(ex, "Appointment");
     }
 
     @ExceptionHandler(AppointmentIsFullException.class)
     public ResponseEntity<Object> appointmentFullEx(AppointmentIsFullException ex) {
-        return appointmentNotAvailable(ex, "Appointment");
+        return resourceNotAvailable(ex, "Appointment");
     }
 
-    @ExceptionHandler(DisciplineAlreadyExistsException.class)
-    public ResponseEntity<Object> disciplineAlreadyExistsEx(DisciplineAlreadyExistsException ex) {
-        return appointmentNotAvailable(ex, "Discipline");
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Object> resourceAlreadyExistsEx(ResourceAlreadyExistsException ex) {
+        return resourceNotAvailable(ex, "resource");
     }
 
     @ExceptionHandler(WrongTypeException.class)

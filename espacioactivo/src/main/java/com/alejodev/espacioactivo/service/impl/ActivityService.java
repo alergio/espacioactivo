@@ -133,25 +133,30 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
     }
 
 
-
     public ActivityDTO getUserActivityDTOById(Long activityId) {
-        ActivityDTO activityDTO = null;
 
-        ResponseDTO responseForAllActivities = readAllByServiceProvider();
-        List<ActivityDTO> activitiesDTO = (List<ActivityDTO>) responseForAllActivities.getData().get("Activities");
+        Long userId = getAuthenticatedUserId();
+        return (ActivityDTO) crudMapper.getUserEntityDTOById(activityId, userId, ReadAllCondition.ACTIVITIES_BY_USERID);
 
-        for(ActivityDTO activity : activitiesDTO) {
-            if(activity.getId().equals(activityId)){
-                activityDTO = activity;
-                break;
-            }
-        }
+        /** el codigo de aca abajo esta deprecado, todavia no lo borro por las dudas **/
 
-        if (activityDTO != null) {
-            return activityDTO;
-        } else {
-            throw new ResourceNotFoundException("Activity");
-        }
+        //        ActivityDTO activityDTO = null;
+//
+//        ResponseDTO responseForAllActivities = readAllByServiceProvider();
+//        List<ActivityDTO> activitiesDTO = (List<ActivityDTO>) responseForAllActivities.getData().get("Activities");
+//
+//        for(ActivityDTO activity : activitiesDTO) {
+//            if(activity.getId().equals(activityId)){
+//                activityDTO = activity;
+//                break;
+//            }
+//        }
+//
+//        if (activityDTO != null) {
+//            return activityDTO;
+//        } else {
+//            throw new ResourceNotFoundException("Activity");
+//        }
     }
 
 

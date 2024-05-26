@@ -210,6 +210,21 @@ VALUES
      ;
 
 
+-- request de nuevas disciplinas
+INSERT INTO request_to_create_discipline (id, discipline_name, discipline_type, status, user_id)
+VALUES
+
+	(1, "Futbol Tennis", "GROUP_CLASS", "ON_HOLD", 7)
+
+	AS new_values(id, discipline_name, discipline_type, status, user_id)
+ ON DUPLICATE KEY UPDATE
+     discipline_name = new_values.discipline_name,
+     discipline_type = new_values.discipline_type,
+     status = new_values.status,
+     user_id = new_values.user_id
+     ;
+
+
 --    select * from role;
 --	select * from user;
 --    select * from user_roles;

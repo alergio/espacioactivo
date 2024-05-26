@@ -1,7 +1,9 @@
 package com.alejodev.espacioactivo.service.mapper;
 
+import com.alejodev.espacioactivo.dto.ActivityDTO;
 import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
+import com.alejodev.espacioactivo.exception.MethodNotAllowedException;
 import com.alejodev.espacioactivo.exception.ResourceNotFoundException;
 import com.alejodev.espacioactivo.repository.IGenericRepository;
 import com.alejodev.espacioactivo.repository.impl.IActivityRepository;
@@ -160,7 +162,7 @@ public class CRUDMapper <T, E> implements ICRUDService {
             case DISCIPLINE_REQUESTS_BY_USERNAME -> {
                 IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository =
                         (IRequestToCreateDisciplineRepository) repository;
-                entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((String) data);
+                entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((Long) data);
             }
 
             case ACTIVITIES_BY_USERID -> {
@@ -253,6 +255,28 @@ public class CRUDMapper <T, E> implements ICRUDService {
 }
 
 
+    public EntityIdentificatorDTO getUserEntityDTOById(Long entityId, Long userId, ReadAllCondition readAllCondition) {
+        EntityIdentificatorDTO entityDTO = null;
+
+        // validacion para que si la instancia no existe tire un 404
+        EntityIdentificatorDTO entityDTOFounded = (EntityIdentificatorDTO) readById(entityId).getData().get(entityClassName);
+
+        ResponseDTO responseForAllEntities = readAllWithCondition(readAllCondition, userId);
+        List<EntityIdentificatorDTO> entitiesDTO = (List<EntityIdentificatorDTO>) responseForAllEntities.getData().get(entityClassNamePlural);
+
+        for(EntityIdentificatorDTO dtoEntity : entitiesDTO) {
+            if(dtoEntity.getId().equals(entityId)){
+                entityDTO = dtoEntity;
+                break;
+            }
+        }
+
+        if (entityDTO != null) {
+            return entityDTO;
+        } else {
+            throw new MethodNotAllowedException("The " + entityClassName + " does not belong to the person who making the request");
+        }
+    }
 
 
 

@@ -14,7 +14,6 @@ public class AppointmentSPController {
     @Autowired
     AppointmentService appointmentService;
 
-
     @PostMapping("/create")
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return ResponseEntity.ok(appointmentService.createByServiceProvider(appointmentDTO));
@@ -29,6 +28,5 @@ public class AppointmentSPController {
     public ResponseEntity<?> updateAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return ResponseEntity.ok(appointmentService.updateByServiceProvider(appointmentDTO));
     }
-
 
 }

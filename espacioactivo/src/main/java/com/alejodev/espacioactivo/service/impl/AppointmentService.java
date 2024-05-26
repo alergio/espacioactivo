@@ -236,6 +236,7 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
         return crudMapper.readAllWithCondition(ReadAllCondition.APPOINTMENTS_BY_USERID, userId);
     }
 
+
     private void appointmentDataValidatorForCreate(AppointmentDTO appointmentDTO) {
 
         if (appointmentDTO.getActivityDTO() == null || appointmentDTO.getActivityDTO().getId() == null){
@@ -270,6 +271,7 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
 
     }
 
+    
     private static void timeValidator(String appointmentDTOTime) {
         Time startTimeAllowed = Time.valueOf("06:00:00");
         Time endTimeAllowed = Time.valueOf("23:00:00");
@@ -301,26 +303,33 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
     }
 
     public AppointmentDTO getUserAppointmentDTOById(Long appointmentId) {
-        AppointmentDTO appointmentDTO = null;
 
-        // validacion para que si el appointment no existe tire un 404
-        AppointmentDTO appointmentDTOFounded = (AppointmentDTO) readById(appointmentId).getData().get("Appointment");
+        Long userId = getAuthenticatedUserId();
+        return (AppointmentDTO) crudMapper.getUserEntityDTOById(appointmentId, userId, ReadAllCondition.APPOINTMENTS_BY_USERID);
 
-        ResponseDTO responseForAllAppointments = readAllByServiceProvider();
-        List<AppointmentDTO> appointmentDTOList = (List<AppointmentDTO>) responseForAllAppointments.getData().get("Appointments");
 
-        for (AppointmentDTO appointment : appointmentDTOList) {
-            if (appointment.getId().equals(appointmentId)){
-                appointmentDTO = appointment;
-                break;
-            }
-        }
+        /** el codigo de aca abajo esta deprecado, todavia no lo borro por las dudas **/
 
-        if (appointmentDTO != null) {
-            return appointmentDTO;
-        } else {
-            throw new MethodNotAllowedException("The Appointment does not belong to the person who making the request");
-        }
+//        AppointmentDTO appointmentDTO = null;
+//
+//        // validacion para que si el appointment no existe tire un 404
+//        AppointmentDTO appointmentDTOFounded = (AppointmentDTO) readById(appointmentId).getData().get("Appointment");
+//
+//        ResponseDTO responseForAllAppointments = readAllByServiceProvider();
+//        List<AppointmentDTO> appointmentDTOList = (List<AppointmentDTO>) responseForAllAppointments.getData().get("Appointments");
+//
+//        for (AppointmentDTO appointment : appointmentDTOList) {
+//            if (appointment.getId().equals(appointmentId)){
+//                appointmentDTO = appointment;
+//                break;
+//            }
+//        }
+//
+//        if (appointmentDTO != null) {
+//            return appointmentDTO;
+//        } else {
+//            throw new MethodNotAllowedException("The Appointment does not belong to the person who making the request");
+//        }
     }
 
 
