@@ -160,7 +160,7 @@ public class CRUDMapper <T, E> implements ICRUDService {
             case DISCIPLINE_REQUESTS_BY_USERNAME -> {
                 IRequestToCreateDisciplineRepository requestToCreateDisciplineRepository =
                         (IRequestToCreateDisciplineRepository) repository;
-                entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((String) data);
+                entityList = (List<E>) requestToCreateDisciplineRepository.findAllRequestsByUser((Long) data);
             }
 
             case ACTIVITIES_BY_USERID -> {

@@ -139,7 +139,7 @@ public class ControllerTest {
 
     @GetMapping("/requestdiscipline/allbyuser")
     public ResponseEntity<?> getAllRequestDisciplineByUserId(){
-        return ResponseEntity.ok(requestToCreateDisciplineService.readAllByUser());
+        return ResponseEntity.ok(requestToCreateDisciplineService.readAllByServiceProvider());
     }
     @GetMapping("/requestdiscipline/all")
     public ResponseEntity<?> getAllRequestDiscipline(){

@@ -30,5 +30,4 @@ public class AppointmentSPController {
         return ResponseEntity.ok(appointmentService.updateByServiceProvider(appointmentDTO));
     }
 
-
 }

@@ -236,6 +236,7 @@ public class AppointmentService implements ICRUDService<AppointmentDTO> {
         return crudMapper.readAllWithCondition(ReadAllCondition.APPOINTMENTS_BY_USERID, userId);
     }
 
+
     private void appointmentDataValidatorForCreate(AppointmentDTO appointmentDTO) {
 
         if (appointmentDTO.getActivityDTO() == null || appointmentDTO.getActivityDTO().getId() == null){

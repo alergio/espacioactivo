@@ -5,7 +5,7 @@ import com.alejodev.espacioactivo.dto.EntityIdentificatorDTO;
 import com.alejodev.espacioactivo.dto.ResponseDTO;
 import com.alejodev.espacioactivo.entity.Discipline;
 import com.alejodev.espacioactivo.entity.DisciplineType;
-import com.alejodev.espacioactivo.exception.DisciplineAlreadyExistsException;
+import com.alejodev.espacioactivo.exception.ResourceAlreadyExistsException;
 import com.alejodev.espacioactivo.exception.WrongTypeException;
 import com.alejodev.espacioactivo.repository.impl.IDisciplineRepository;
 import com.alejodev.espacioactivo.service.ICRUDService;
@@ -81,7 +81,7 @@ public class DisciplineService implements ICRUDService<DisciplineDTO> {
                 );
 
         if (discipline.isPresent()) {
-            throw new DisciplineAlreadyExistsException();
+            throw new ResourceAlreadyExistsException("Discipline");
         }
 
     }
