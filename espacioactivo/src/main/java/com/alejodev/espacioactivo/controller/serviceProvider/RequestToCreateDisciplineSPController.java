@@ -1,7 +1,5 @@
 package com.alejodev.espacioactivo.controller.serviceProvider;
 
-import com.alejodev.espacioactivo.dto.ActivityDTO;
-import com.alejodev.espacioactivo.dto.AppointmentDTO;
 import com.alejodev.espacioactivo.dto.RequestToCreateDisciplineDTO;
 import com.alejodev.espacioactivo.service.impl.RequestToCreateDisciplineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,11 @@ public class RequestToCreateDisciplineSPController {
     @PutMapping("/update")
     public ResponseEntity<?> updateRequest(@RequestBody RequestToCreateDisciplineDTO requestToCreateDisciplineDTO) {
         return ResponseEntity.ok(requestToCreateDisciplineService.updateByServiceProvider(requestToCreateDisciplineDTO));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteRequest(@PathVariable Long id){
+        return ResponseEntity.ok(requestToCreateDisciplineService.deleteByServiceProvider(id));
     }
 
 }
