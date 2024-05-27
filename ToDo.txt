@@ -49,7 +49,7 @@ TO-DO:
 								
 						
 	   	     
-			 > solicitud de disciplinas >> Listo y validado EXCEPTO la parte en la que es atendida por un admin <<
+			 > solicitud de disciplinas >> Listo y validado <<
 
 				{
 
@@ -68,13 +68,6 @@ TO-DO:
 
 						implementar que si ya hay una solicitud con el mismo nombre y el mismo tipo, lanzar una excepcion especifica >> listo y validado 19/05 <<
 
-
-							>>>>>>>> todo lo de aca abajo esta ToDo <<<<<<<<< <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-						esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
-						en caso de ser aprobada, se dara de alta una nueva disciplina
-						en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
-							en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
-								aca capaz sea necesario integrar websocket
 
 					el usuario puede:
 						crear una solicitud  >> LISTO << >> listo y validado 19/05 <<
@@ -200,7 +193,7 @@ TO-DO:
 
 
 		elimina
-			> SUS actividades >> LISTO <<
+			> SUS actividades >> LISTO << >>>>>>>>>>> no puede eliminar <<<<<<<<<<<
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
 					Y QUE PASA CON LOS APPOINTMENT ????? AL ELIMINAR UN ACTIVITY ??? 
@@ -209,9 +202,11 @@ TO-DO:
 											tampoco podra eliminar las actividades <<<<<<<<<
 											habria que pensarlo mas despues
 
-			>> SUS appointments
+
+			>> SUS appointments	>>>>>>>>>>> no puede eliminar <<<<<<<<<<<
 						un service-provider no puede eliminar appointments, puede setearlos como unavailable y cancelar las reservas.
-					
+
+
 			>> SUS Solicitudes
 										>> listo << >> validado <<
 				eliminar SUS solicitudes
@@ -222,7 +217,7 @@ TO-DO:
 			
 			
 			
-		>>>>>>>>>>>>>>>>>>>>>>>>> tambien puede cancelar reservas individualmente <<<<<<<<<<<<<<<<<<<<<<<<<<<
+		>>>>>>>>>>>>>>>>>>>>>>>>> tambien puede cancelar reservas individualmente <<<<<<<<<<<<<<<<<<<<<<<<<<< esto seria lo proximo , 26/5 10:42 pm
 			
 		que interaccion tiene con las reservas a sus appointments?
 			puede cancelarlas, y una vez que la cancela no lo puede revertir
@@ -232,6 +227,16 @@ TO-DO:
 
 		crea
 			> solicitud para ser un service provider
+
+					esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
+						en caso de ser aprobada, se dara de alta una nueva disciplina
+						en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
+							en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
+								aca capaz sea necesario integrar websocket
+
+
+
+
 			> reservas
 
 		lee

@@ -29,6 +29,6 @@ public class ActivitySPController {
     public ResponseEntity<?> updateActivity(@RequestBody ActivityDTO activityDTO) {
         return ResponseEntity.ok(activityService.updateByServiceProvider(activityDTO));
     }
-    
+
 
 }
