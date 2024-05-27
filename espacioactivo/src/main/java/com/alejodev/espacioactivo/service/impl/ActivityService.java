@@ -125,14 +125,6 @@ public class ActivityService implements ICRUDService<ActivityDTO> {
     }
 
 
-    public ResponseDTO deleteByServiceProvider(Long activityId) {
-
-        getUserActivityDTOById(activityId);
-        return delete(activityId);
-
-    }
-
-
     public ActivityDTO getUserActivityDTOById(Long activityId) {
 
         Long userId = getAuthenticatedUserId();

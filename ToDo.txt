@@ -203,8 +203,11 @@ TO-DO:
 			> SUS actividades >> LISTO <<
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
-								>>>>>>>>>>>>>>>>>>>>> ver esto <<<<<<<<<<<<<<<<<<<<<<<<<
-					>>>>>>>>>>>>>>>>>>> Y QUE PASA CON LOS APPOINTMENT ????? AL ELIMINAR UN ACTIVITY ??? <<<<<<<<<<<<<<<<<<<<< 26/5 9:50 pm
+					Y QUE PASA CON LOS APPOINTMENT ????? AL ELIMINAR UN ACTIVITY ??? 
+
+						>>>>>>>>>> lo que voy a resolver aca por ahora, es que el service provider, asi como no puede eliminar los appointment
+											tampoco podra eliminar las actividades <<<<<<<<<
+											habria que pensarlo mas despues
 
 			>> SUS appointments
 						un service-provider no puede eliminar appointments, puede setearlos como unavailable y cancelar las reservas.
