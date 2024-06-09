@@ -42,7 +42,7 @@ public class Activity {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity")
     private Set<Appointment> appointments = new HashSet<>();
 
 

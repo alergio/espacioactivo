@@ -30,10 +30,5 @@ public class ActivitySPController {
         return ResponseEntity.ok(activityService.updateByServiceProvider(activityDTO));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteActivity(@PathVariable Long id) {
-        return ResponseEntity.ok(activityService.deleteByServiceProvider(id));
-    }
-
 
 }

@@ -49,7 +49,7 @@ TO-DO:
 								
 						
 	   	     
-			 > solicitud de disciplinas >> Listo y validado EXCEPTO la parte en la que es atendida por un admin <<
+			 > solicitud de disciplinas >> Listo y validado <<
 
 				{
 
@@ -68,13 +68,6 @@ TO-DO:
 
 						implementar que si ya hay una solicitud con el mismo nombre y el mismo tipo, lanzar una excepcion especifica >> listo y validado 19/05 <<
 
-
-							>>>>>>>> todo lo de aca abajo esta ToDo <<<<<<<<< <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-						esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
-						en caso de ser aprobada, se dara de alta una nueva disciplina
-						en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
-							en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
-								aca capaz sea necesario integrar websocket
 
 					el usuario puede:
 						crear una solicitud  >> LISTO << >> listo y validado 19/05 <<
@@ -200,24 +193,30 @@ TO-DO:
 
 
 		elimina
-			> SUS actividades >> LISTO <<
+			> SUS actividades >> LISTO << >>>>>>>>>>> no puede eliminar <<<<<<<<<<<
 		 		verificar las dependencias >> LISTO << el user queda ok y el address se borra
 
-			>> SUS appointments
-					>> hacer esto << 19/5 3pm
-					
-						un service-provider no puede eliminar appointments, puede setearlos como unavailable y cancelar las reservas.
-					
-			>> SUS Solicitudes
-										>> TO DO <<
-				eliminar SUS solicitudes
-					solo si estan en estado ON_HOLD
+					Y QUE PASA CON LOS APPOINTMENT ????? AL ELIMINAR UN ACTIVITY ??? 
 
-			
-			
-			
-			
-		tambien puede cancelar reservas individualmente
+						>>>>>>>>>> lo que voy a resolver aca por ahora, es que el service provider, asi como no puede eliminar los appointment
+											tampoco podra eliminar las actividades <<<<<<<<<
+											habria que pensarlo mas despues
+
+
+			>> SUS appointments	>>>>>>>>>>> no puede eliminar <<<<<<<<<<<
+						un service-provider no puede eliminar appointments, puede setearlos como unavailable y cancelar las reservas.
+
+
+			>> SUS Solicitudes
+										>> listo << >> validado <<
+				eliminar SUS solicitudes
+					solo si estan en estado ON_HOLD >> listo << >> validado <<
+					y solo si son de el >> listo << >> validado <<
+		
+
+
+		
+		>>>>>>>>>>>>>>>>>>>>>>>>> tambien puede cancelar reservas individualmente <<<<<<<<<<<<<<<<<<<<<<<<<<< esto seria lo proximo , 26/5 10:42 pm
 			
 		que interaccion tiene con las reservas a sus appointments?
 			puede cancelarlas, y una vez que la cancela no lo puede revertir
@@ -227,6 +226,17 @@ TO-DO:
 
 		crea
 			> solicitud para ser un service provider
+
+					esta solicitud va a ser atendida por un ADMIN que la aprobara o rechazara
+						en caso de ser aprobada, se dara de alta una nueva disciplina
+						en caso de ser rechazada la solicitud pasara a estar rechazada y no se hara nada
+							en ambos casos (aprobada o rechazada) se le enviara un mensaje al usuario
+								aca capaz sea necesario integrar websocket
+
+
+
+
+			> reservas
 
 		lee
 
@@ -376,6 +386,8 @@ codigo comentado que tengo que mirar
 
 
 - dockerizar
+	con esto no solo me refiero al docker compose, si no, hacer un docker file, subir la imagen a dockerHub
+	despues en un pipeline implementar la actualizacion de esa imagen
 
 - el mapper tendria que tener excepciones porque se rompe por completo si algun dato no se manda
 

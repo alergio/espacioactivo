@@ -11,3 +11,8 @@ select * from role;
 select * from token;
 select * from user;
 select * from user_roles;
+
+
+select * from appointment
+join activity where appointment.activity_id = activity.id
+and activity.user_id = 7;

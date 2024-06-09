@@ -92,6 +92,18 @@ public class RequestToCreateDisciplineService implements ICRUDService<RequestToC
         return update(requestDTOForUpdate);
     }
 
+    public ResponseDTO deleteByServiceProvider(Long requestId) {
+
+        RequestToCreateDisciplineDTO requestDTOForDelete = getUserRequestById(requestId);
+
+        // si no esta en ON_HOLD no se puede eliminar.
+        if (!Objects.equals(requestDTOForDelete.getStatus(), String.valueOf(RequestStatus.ON_HOLD))) {
+            throw new MethodNotAllowedException("Your request has already been reviewed by an administrator" +
+                    " and can no longer be deleted. The status of the request is: " + requestDTOForDelete.getStatus());
+        }
+
+        return delete(requestId);
+    }
 
     private RequestToCreateDisciplineDTO dataValidatorForUpdate(RequestToCreateDisciplineDTO requestToCreateDisciplineDTO) {
         // valido que no venga el id vacio
@@ -128,7 +140,6 @@ public class RequestToCreateDisciplineService implements ICRUDService<RequestToC
             throw new DataIntegrityVExceptionWithMsg("No changes found to update.");
         }
 
-//        disciplineValidator(requestToCreateDisciplineDTO);
         // todas las validaciones para la request
         allValidationsForRequestToCreateDiscipline(requestDTOForUpdate);
 
